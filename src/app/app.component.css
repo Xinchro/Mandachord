@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #5af;
+}
+
+.title {
+
+}
+
+.mandachord {
+
+}
+
+.bar-label {
+
+}
+
+.bars {
+  list-style: none;
+  padding: 0;
+}
+
+.bar {
+  background: cyan;
+}
+
+.measures {
+  list-style: none;
+  padding: 0;
+}
+
+.measure {
+  background: lime;
+}
+
+.beatrows {
+  list-style: none;
+  padding: 0;
+}
+
+.beatrow {
+  background: maroon;
+  transform-origin: 50% 100%;
+  position: absolute;
+  left: 50vw;
+  top: -10vh;
+}
+
+.beats {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  flex-flow: column;
+  /*transform: rotate(90deg);*/
+}
+
+.beat {
+  height: 48px;
+  width: 48px;
+  background: pink;
+  border: 1px solid black;
+}
+
+.percussion {
+  background: gray;
+}
+
+.bass {
+  background: blue;
+}
+
+.melody {
+  background: violet;
+}

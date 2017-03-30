@@ -1,3 +1,40 @@
-<h1>
-  {{title}}
+<h1 class="title">
+  Octavia Mandachord
 </h1>
+<!--
+4 bar
+4 measure
+4 beat
+3 percussion
+5 bass
+5 melody
+-->
+<section class="mandachord">
+  <ul class="bars">
+  <!-- {{print(bars)}} -->
+    <li class="bar" *ngFor="let bar of bars; let i = index">
+      <label class="bar-label">{{i+1}}</label>
+      <!-- {{print("==="+i)}} -->
+      <!-- {{print(bar)}} -->
+      <ul class="measures">
+        <li class="measure" *ngFor="let measure of bar; let j = index">
+          <!-- {{print("==="+i)}} -->
+          <!-- {{print(measure)}} -->
+          <ul class="beatrows">
+            <li class="beatrow" *ngFor="let beatrow of measure; let k = index" [ngStyle]="{'transform': rotateRow()}">
+              <!-- {{print(measure[j])}} -->
+              <!-- {{print(beatrow)}} -->
+              <ul class="beats">
+                <!-- {{beatrow}} -->
+                <li class="beat" *ngFor="let beat of beatrow; let l = index"
+                [ngClass]="{'percussion': l<=2, 'bass': l>2&&l<8, 'melody': l>=8}">
+                  {{l+1}}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</section>
