@@ -1,1 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  padding: 0;
+  background: #5af;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*.beat {
+  fill: lime;
+}
+.beat.percussion {
+  fill: silver;
+}
+.beat.percussion:hover {
+  fill: lightgray;
+}
+.beat.percussion.noteOn {
+  fill: gray;
+}
+.beat.bass {
+  fill: blue;
+}
+.beat.bass:hover {
+  fill: lightblue;
+}
+.beat.bass.noteOn {
+  fill: cyan;
+}
+.beat.melody {
+  fill: violet;
+}
+.beat.melody:hover {
+  fill: pink;
+}
+.beat.melody.noteOn {
+  fill: purple;
+}*/

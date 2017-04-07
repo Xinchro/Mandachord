@@ -1,11 +1,5 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: #5af;
-}
-
 .title {
-
+  display: block;
 }
 
 .mandachord {
@@ -19,32 +13,56 @@ body {
 .bars {
   list-style: none;
   padding: 0;
+  height: 900px;
+  width: 900px;
+  background: pink;
 }
 
 .bar {
-  background: cyan;
+  background: rgba(0,150,255,0.5);
+  /*position: absolute;*/
+  transform-origin: 50% 50%;
+  /*height: calc((20px * 3) + (15px * 5) + (10px * 5) + 327px);*/
+  height: 50%;
+  width: 50%;
+  /*left: calc(50% - ((20px * 3) + (15px * 5) + (10px * 5)));*/
+  /*top: calc(50% - ((20px * 3) + (15px * 5) + (10px * 5)));*/
+  display: inline-flex;
+  flex-flow: column;
+  /*padding-left: 593px;*/
 }
 
 .measures {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-flow: row;
+  bottom: 0;
+  /*bottom: 215px;*/
+  position: absolute;
 }
 
 .measure {
-  background: lime;
+  background: rgba(0,255,0,0.5);
+  position: absolute;
+  bottom: 215px;
+  transform-origin: 0% calc(100% + 215px) 0px;
+  box-shadow: 0 5px 0px 0px black;
+}
+.measure-inner {
+  transform: rotate(2.5deg);
 }
 
 .beatrows {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-flow: row;
 }
 
 .beatrow {
   background: maroon;
   transform-origin: 50% 100%;
-  position: absolute;
-  left: 50vw;
-  top: -10vh;
 }
 
 .beats {
@@ -52,24 +70,42 @@ body {
   list-style: none;
   padding: 0;
   flex-flow: column;
-  /*transform: rotate(90deg);*/
 }
 
-.beat {
-  height: 48px;
-  width: 48px;
+/*.beat {
+  height: 20px;
+  width: 21.0991px;
   background: pink;
   border: 1px solid black;
-}
+}*/
 
-.percussion {
-  background: gray;
+.beat {
+  fill: lime;
 }
-
-.bass {
-  background: blue;
+.beat.percussion {
+  fill: silver;
 }
-
-.melody {
-  background: violet;
+.beat.percussion:hover {
+  fill: lightgray;
+}
+.beat.percussion.noteOn {
+  fill: gray;
+}
+.beat.bass {
+  fill: blue;
+}
+.beat.bass:hover {
+  fill: lightblue;
+}
+.beat.bass.noteOn {
+  fill: cyan;
+}
+.beat.melody {
+  fill: violet;
+}
+.beat.melody:hover {
+  fill: pink;
+}
+.beat.melody.noteOn {
+  fill: purple;
 }
