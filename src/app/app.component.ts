@@ -64,7 +64,7 @@ export class AppComponent {
   toggleBeat(event) {
     console.log("toggling beat")
 
-    let id = event.originalTarget.id
+    let id = event.target.id
     let idl = id.length
 
     let barMatch = parseInt(`${id[idl-8]}${id[idl-7]}`)
