@@ -22,21 +22,6 @@ export class AppComponent {
   }
 
   setupMandachrod() {
-    // for(let i=0; i<13; i++) {
-    //   this.tones.push(false)
-    // }
-    // for(let i=0; i<4; i++) {
-    //   this.beats.push(this.tones.slice(0))
-    // }
-    // // for(let i=0; i<1; i++) {
-    // for(let i=0; i<4; i++) {
-    //   this.measures.push(this.beats.slice(0))
-    // }
-    // // for(let i=0; i<1; i++) {
-    // for(let i=0; i<4; i++) {
-    //   this.bars.push(this.measures.slice(0))
-    // }
-    // console.log(this.bars)
     this.bars = this.returnBars()
   }
 
@@ -76,205 +61,6 @@ export class AppComponent {
     console.log(obj)
   }
 
-  rotateBar(index) {
-    let degs = (90*index)//-45
-    switch(index) {
-      case 0:
-        degs = -90
-        break
-      case 1:
-        degs = 0
-        break
-      case 2:
-        degs = 180
-        break
-      case 3:
-        degs = 90
-        break
-    }
-    // this.barRot++
-    return {'transform': `rotate(${degs}deg)`}
-  }
-
-  rotateMeasure(index) {
-    // let degs = 22.5*index//+(22.5+(22.5/2))
-    let degs = 22.5*index//-(22.5/2)
-    let orig = [50, 100]
-
-    orig[1] = 100// + 27.7414819157
-
-    switch(index) {
-      case 0:
-        // orig[0] = 250
-        orig[0] = 135
-        orig[1] = 105
-        break
-      case 1:
-        // orig[0] = 150
-        orig[0] = 100
-        orig[1] = 100
-        break
-      case 2:
-        // orig[0] = -50
-        orig[0] = 0
-        orig[1] = 100
-        break
-      case 3:
-        // orig[0] = -150
-        orig[0] = -35
-        orig[1] = 105
-        break
-    }
-
-    // if(this.measureRot <4) {
-    //   this.measureRot++
-    // } else {
-    //   this.measureRot = 0
-    // }
-    // return {'transform': `rotate(${degs}deg)`, 'transform-origin': `${orig[0]}% ${orig[1]}%`}
-    return {'transform': `rotate(${degs}deg)`}
-  }
-
-  rotateRow(index) {
-    // let degs = 5.625*index
-    // if(this.rowRot <4) {
-    //   this.rowRot++
-    // } else {
-    //   this.rowRot = 0
-    // }
-    // return `rotate(${degs}deg)`
-    let degs = 5.625*index//-(5.625+(5.625/2))
-    let orig = [50, 100]
-
-    switch(index) {
-      case 0:
-        // orig[0] = 250
-        orig[0] = 200
-        break
-      case 1:
-        // orig[0] = 150
-        orig[0] = 100
-        break
-      case 2:
-        // orig[0] = -50
-        orig[0] = 0
-        break
-      case 3:
-        // orig[0] = -150
-        orig[0] = -100
-        break
-    }
-
-    // orig[0] = 50
-    // orig[1] = 100 + 27.7414819157
-
-    // if(this.measureRot <4) {
-    //   this.measureRot++
-    // } else {
-    //   this.measureRot = 0
-    // }
-    return {'transform': `rotate(${degs}deg)`, 'transform-origin': `${orig[0]}% ${orig[1]}%`}
-  }
-
-  thing() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-       if (this.readyState == 4 && this.status == 200) {
-           myFunction(this);
-       }
-    };
-    xhttp.open("GET", "../assets/mandachordv2.svg", true);
-    xhttp.send();
-
-    function myFunction(xml) {
-        var xmlDoc, txt;
-        xmlDoc = xml.responseXML;
-        // console.log(xmlDoc);
-        txt = "";
-        let strokes = xmlDoc.getElementById(`strokes`).children
-          // console.log(xmlDoc.getElementById(`path2`))
-        // console.dir(strokes);
-        let bar=1
-        let measure=1
-        let beat=1
-        let tone=1
-        for (var i = 0; i < strokes.length; i++) {
-          // if(xmlDoc.getElementById(`path${i}`)) {
-            // console.log(xmlDoc.getElementById(`path${i}`))
-            // xmlDoc.getElementById(`path${i}`).setAttribute('id', `beat${i/2}`)
-            let sbar = ""
-            let smeasure = ""
-            let sbeat = ""
-            let stone = ""
-            let type = ""
-            if(bar<10) {
-              sbar = `0${bar}`
-            }else{
-              sbar=`${bar}`
-            }
-            if(measure<10) {
-              smeasure = `0${measure}`
-            }else{
-              smeasure=`${measure}`
-            }
-            if(beat<10) {
-              sbeat = `0${beat}`
-            }else{
-              sbeat=`${beat}`
-            }
-            if(tone<10) {
-              stone = `0${tone}`
-            }else{
-              stone=`${tone}`
-            }
-            if(tone<4) {
-              type = "percussion"
-            } else if(tone>3&&tone<9) {
-              type = "bass"
-            } else {
-              type = "melody"
-            }
-
-            xmlDoc.getElementById(`strokes`).children[i].setAttribute('id', `${type}${sbar}${smeasure}${sbeat}${stone}`)
-            xmlDoc.getElementById(`strokes`).children[i].setAttribute('class', `${type} beat`)
-            tone++;
-            if(tone>13) {
-              tone=1
-              beat++
-              // console.log([x,y])
-            }
-            if(beat>4) {
-              beat=1
-              measure++
-              // console.log([x,y])
-            }
-            if(measure>4) {
-              measure=1
-              bar++
-              // console.log([tone,beat,measure,bar])
-            }
-          // }
-        }
-        // strokes = xmlDoc.getElementById(`strokes`)
-        // console.dir(strokes);
-        // console.dir(xmlDoc.getElementById(`strokes`).childNodes);
-        let serialized = (new XMLSerializer()).serializeToString(xmlDoc)
-        // console.log(serialized);
-        // x = xmlDoc.getElementsByTagName('title');
-        // // Add a new attribute to each title element
-        // for (i = 0; i < x.length; i++) {
-        //     x[i].setAttribute("edition", "first");
-        // }
-        // // Output titles and edition value
-        // for (i = 0; i < x.length; i++) {
-        //     txt += x[i].childNodes[0].nodeValue +
-        //     " - Edition: " +
-        //     x[i].getAttribute('edition') + "<br>";
-        // }
-        document.getElementById("xmlout").innerHTML = serialized;
-    }
-  }
-
   toggleBeat(event) {
     console.log("toggling beat")
 
@@ -289,20 +75,8 @@ export class AppComponent {
     this.bars[barMatch-1][measureMatch-1][beatMatch-1][toneMatch-1]
     = !this.bars[barMatch-1][measureMatch-1][beatMatch-1][toneMatch-1]
 
-    // this.toggleClass(id, this.bars[barMatch-1][measureMatch-1][beatMatch-1][toneMatch-1])
-
-    console.log(this.bars)
   }
 
-  // toggleClass(ID, bool) {
-  //   @ViewChild(ID) id;
-
-  //   if(bool) {
-  //     id.addClass("active")
-  //   } else {
-  //     id.removeClass("active")
-  //   }
-  // }
 
   isToneOn(id) {
     let idl = id.length
@@ -313,5 +87,152 @@ export class AppComponent {
     let toneMatch = parseInt(`${id[idl-2]}${id[idl-1]}`)
 
     return this.bars[barMatch-1][measureMatch-1][beatMatch-1][toneMatch-1]
+  }
+
+  toneFreq = 440
+  changeFreq(event) {
+    this.toneFreq = event.target.value
+  }
+
+  context = new (AudioContext)();
+  osc = this.context.createOscillator(); // instantiate an oscillator
+
+  playTone(freq) {
+    this.osc = this.context.createOscillator(); // instantiate an oscillator
+    this.osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+    // this.osc.frequency.value = this.toneFreq; // Hz
+    this.osc.frequency.value = freq; // Hz
+    this.osc.connect(this.context.destination); // connect it to the destination
+    this.osc.start(); // start the oscillator
+    this.osc.stop(this.context.currentTime + 0.2);
+  }
+
+  stopTone() {
+    this.osc.stop();
+  }
+
+  perc1Sound = 100
+  perc2Sound = 100
+  perc3Sound = 100
+  bass1Sound = 100
+  bass2Sound = 100
+  bass3Sound = 100
+  bass4Sound = 100
+  bass5Sound = 100
+  melody1Sound = 100
+  melody2Sound = 100
+  melody3Sound = 100
+  melody4Sound = 100
+  melody5Sound = 100
+
+  setupSounds() {
+    // percussion
+    // 200-300
+
+    this.perc1Sound = 233
+    this.perc2Sound = 266
+    this.perc3Sound = 299
+
+    // bass
+    // 100-200
+
+    this.bass1Sound = 110
+    this.bass2Sound = 130
+    this.bass3Sound = 150
+    this.bass4Sound = 170
+    this.bass5Sound = 190
+
+    // melody
+    // 300-400
+
+    this.melody1Sound = 310
+    this.melody2Sound = 330
+    this.melody3Sound = 350
+    this.melody4Sound = 370
+    this.melody5Sound = 390
+  }
+
+  playSoundsLinear() {
+    let totalNotes = 4*4*4*13
+    let tone = 1
+    let beat = 1
+    let measure = 1
+    let bar = 1
+    this.setupSounds()
+
+    this.iterateNotes(totalNotes, bar, measure, beat, tone)
+
+  }
+
+  iterateNotes(i, bar, measure, beat, tone) {
+    if (i <= 0) return;
+
+    setTimeout(() => {
+
+      if(this.bars[bar-1][measure-1][beat-1][tone-1]) {
+        // console.log(`playing note ${[bar-1,measure-1,beat-1,tone-1]}`)
+        switch(tone-1) {
+          case 0:
+            this.playTone(this.perc1Sound)
+            break
+          case 1:
+            this.playTone(this.perc2Sound)
+            break
+          case 2:
+            this.playTone(this.perc3Sound)
+            break
+          case 3:
+            this.playTone(this.bass1Sound)
+            break
+          case 4:
+            this.playTone(this.bass2Sound)
+            break
+          case 5:
+            this.playTone(this.bass3Sound)
+            break
+          case 6:
+            this.playTone(this.bass4Sound)
+            break
+          case 7:
+            this.playTone(this.bass5Sound)
+            break
+          case 8:
+            this.playTone(this.melody1Sound)
+            break
+          case 9:
+            this.playTone(this.melody2Sound)
+            break
+          case 10:
+            this.playTone(this.melody3Sound)
+            break
+          case 11:
+            this.playTone(this.melody4Sound)
+            break
+          case 12:
+            this.playTone(this.melody5Sound)
+            break
+        }
+      } else {
+      }
+      tone++;
+      if(tone>13) {
+        tone=1
+        beat++
+      }
+      if(beat>4) {
+        beat=1
+        measure++
+      }
+      if(measure>4) {
+        measure=1
+        bar++
+      }
+      if(bar>4) {
+        bar=1
+      }
+
+      this.iterateNotes(--i, bar, measure, beat, tone);
+
+    }, 10);
   }
 }
