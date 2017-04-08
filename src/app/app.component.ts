@@ -25,7 +25,8 @@ export class AppComponent {
     this.activatedRoute.queryParams.subscribe((params: Params) => {
       this.songCode = params['song'];
       if(this.songCode) {
-        console.log(this.songCode);
+        // console.log(this.songCode);
+        console.log(window.location.href)
         this.decodeURL()
       }
     });
@@ -33,7 +34,8 @@ export class AppComponent {
 
   songCode = ""
 
-  ngOnInit() {
+  getSongURL() {
+    return `${location.protocol}//${window.location.host}?song=${this.songCode}`
   }
 
   setupMandachrod() {
