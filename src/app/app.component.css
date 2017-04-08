@@ -1,9 +1,22 @@
+header {
+  text-align: center;
+}
+
 .title {
   display: block;
 }
 
 .mandachord {
 
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  text-align: center;
 }
 
 .bar-label {

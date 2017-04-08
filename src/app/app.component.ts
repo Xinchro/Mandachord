@@ -101,6 +101,8 @@ export class AppComponent {
     this.bars[barMatch-1][measureMatch-1][beatMatch-1][toneMatch-1]
     = !this.bars[barMatch-1][measureMatch-1][beatMatch-1][toneMatch-1]
 
+    this.encodeURL()
+
   }
 
 
