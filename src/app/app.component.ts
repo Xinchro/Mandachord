@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+import { OnInit, OnDestroy, Component } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -16,9 +17,23 @@ export class AppComponent {
   // a bar is made up of measures
   bars = []
 
-  constructor() {
+  constructor(private activatedRoute: ActivatedRoute) {
     console.log("Mandachord warming up")
     this.setupMandachrod()
+
+    // subscribe to router event
+    this.activatedRoute.queryParams.subscribe((params: Params) => {
+      this.songCode = params['song'];
+      if(this.songCode) {
+        console.log(this.songCode);
+        this.decodeURL()
+      }
+    });
+  }
+
+  songCode = ""
+
+  ngOnInit() {
   }
 
   setupMandachrod() {
@@ -55,6 +70,15 @@ export class AppComponent {
       bars.push(this.returnMeasures())
     }
     return bars
+  }
+
+  encodeURL() {
+    this.songCode = btoa(JSON.stringify(this.bars))
+  }
+
+  decodeURL() {
+    this.bars = JSON.parse(atob(this.songCode))
+    console.log(this.bars)
   }
 
   print(obj) {
@@ -233,6 +257,6 @@ export class AppComponent {
 
       this.iterateNotes(--i, bar, measure, beat, tone);
 
-    }, 10);
+    }, 15);
   }
 }

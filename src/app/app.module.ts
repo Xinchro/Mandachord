@@ -6,6 +6,12 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { InlineSVGModule } from 'ng-inline-svg';
 
+import { RouterModule, Routes } from '@angular/router';
+
+const appRoutes: Routes = [
+  // { path: '', component: AppComponent }
+];
+
 @NgModule({
   declarations: [
     AppComponent
@@ -14,7 +20,8 @@ import { InlineSVGModule } from 'ng-inline-svg';
     BrowserModule,
     FormsModule,
     HttpModule,
-    InlineSVGModule
+    InlineSVGModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent],
