@@ -130,6 +130,7 @@ export class AppComponent {
   osc = this.context.createOscillator() // instantiate an oscillator
 
   playNote(freq) {
+    console.log(freq)
     this.osc = this.context.createOscillator() // instantiate an oscillator
     this.osc.type = 'sine' // this is the default - also square, sawtooth, triangle
     this.osc.frequency.value = freq // Hz
@@ -138,7 +139,7 @@ export class AppComponent {
     this.osc.stop(this.context.currentTime + 0.2)
   }
 
-  stopnote() {
+  stopNote() {
     this.osc.stop()
   }
 

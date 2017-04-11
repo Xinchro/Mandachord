@@ -11,9 +11,9 @@
   <hr>
   <button (click)="playSoundsLinear()">Play track</button>
   <hr>
-  <button (click)="playTone(toneFreq)">Beep</button>
+  <button (click)="playNote(noteFreq)">Beep</button>
   <input type="number" placeholder="Frequency(440)" (keyup)="changeFreq($event)">
-  <button (click)="stopTone()">End beat</button>
+  <button (click)="stopNote()">End beat</button>
   <hr>
   <button (click)="compressThis(bars)">Compress</button>
   <button (click)="decompressThis(songCode)">Decompress</button>
