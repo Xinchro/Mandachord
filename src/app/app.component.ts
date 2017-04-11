@@ -333,25 +333,26 @@ export class AppComponent {
       output = lzw.decode(input)
 
       output = output.replace(/m/g, "lh") // ftf
-      output = output.replace(/l/g, "hg") // ft
-      output = output.replace(/n/g, "kg") // tft
-      output = output.replace(/k/g, "gh") // tf
+                     .replace(/l/g, "hg") // ft
+                     .replace(/n/g, "kg") // tft
+                     .replace(/k/g, "gh") // tf
 
-      output = output.replace(/p/g, "f2") // f2, f20-f29
-      output = output.replace(/h/g, "f1") // f1, f10-f19
-      output = output.replace(/o/g, "t2") // t2, t20-t29
-      output = output.replace(/g/g, "t1") // t1, t10-t19
+                     .replace(/p/g, "f2") // f2, f20-f29
+                     .replace(/h/g, "f1") // f1, f10-f19
+                     .replace(/o/g, "t2") // t2, t20-t29
+                     .replace(/g/g, "t1") // t1, t10-t19
 
     } else {
       output = input.replace(/t1/g, "g") // t1, t10-t19
-      output = input.replace(/t2/g, "o") // t2, t20-t29
-      output = input.replace(/f1/g, "h") // f1, f10-f19
-      output = input.replace(/f2/g, "p") // f2, f20-f29
+                    .replace(/t2/g, "o") // t2, t20-t29
+                    .replace(/f1/g, "h") // f1, f10-f19
+                    .replace(/f2/g, "p") // f2, f20-f29
 
-      output = input.replace(/gh/g, "k") // tf
-      output = input.replace(/kg/g, "n") // tft
-      output = input.replace(/hg/g, "l") // ft
-      output = input.replace(/lh/g, "m") // ftf
+                    .replace(/gh/g, "k") // tf
+                    .replace(/kg/g, "n") // tft
+                    .replace(/hg/g, "l") // ft
+                    .replace(/lh/g, "m") // ftf
+      console.log(output)
 
       output = lzw.encode(output)
     }
@@ -400,8 +401,19 @@ export class AppComponent {
       }
     }
 
-    // console.log(decompressed)
+    console.log(decompressed)
     return decompressed
+  }
+
+  copyURL() {
+    console.log("copying to clipboard")
+    let listener  = e => {
+      e.clipboardData.setData("text/plain", this.getSongURL())
+      e.preventDefault()
+    }
+    document.addEventListener("copy", listener)
+    document.execCommand("copy")
+    document.removeEventListener("copy", listener)
   }
 
   randomizeIt() {

@@ -7,8 +7,7 @@
 </header>
 <section id="controlPanel" class="panel">
   <h2>dev panel</h2>
-  <button (click)="encodeURL()">Copy URL</button>
-  <button (click)="decodeURL()">Load URL</button>
+  <button (click)="copyURL()">Copy URL</button>
   <hr>
   <button (click)="playSoundsLinear()">Play track</button>
   <hr>
@@ -17,7 +16,7 @@
   <button (click)="stopTone()">End beat</button>
   <hr>
   <button (click)="compressThis(bars)">Compress</button>
-  <button (click)="decompressThis(compressThis(bars))">Decompress</button>
+  <button (click)="decompressThis(songCode)">Decompress</button>
   <button (click)="randomizeIt()">Randomize</button>
   <hr>
 </section>
