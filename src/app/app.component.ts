@@ -18,6 +18,10 @@ export class AppComponent {
   // a bar is made up of measures
   bars = []
 
+  paused = true
+
+  totalNotes = 4*4*4*13
+
   constructor(private activatedRoute: ActivatedRoute) {
     console.log("Mandachord warming up")
     this.setupMandachrod()
@@ -109,7 +113,6 @@ export class AppComponent {
 
   }
 
-
   isNoteOn(id) {
     let idl = id.length
 
@@ -130,7 +133,6 @@ export class AppComponent {
   osc = this.context.createOscillator() // instantiate an oscillator
 
   playNote(freq) {
-    console.log(freq)
     this.osc = this.context.createOscillator() // instantiate an oscillator
     this.osc.type = 'sine' // this is the default - also square, sawtooth, triangle
     this.osc.frequency.value = freq // Hz
@@ -185,97 +187,129 @@ export class AppComponent {
   }
 
   playSoundsLinear() {
-    let totalNotes = 4*4*4*13
     let note = 1
     let beat = 1
     let measure = 1
     let bar = 1
     this.setupSounds()
 
-    this.beatCounter = totalNotes
+    this.beatCounter = this.totalNotes
     this.iterateNotes(bar, measure, beat, note)
 
   }
 
   beatCounter = 0
+  beatsPlayed = 0
+  barPlaying = 1
+  measurePlaying = 1
+  beatPlaying = 1
+  notePlaying = 1
 
+  resetPlayback() {
+    console.log("track resetting")
+    this.beatsPlayed = 0
+    this.barPlaying = 1
+    this.measurePlaying = 1
+    this.beatPlaying = 1
+    this.notePlaying = 1
+  }
+
+  // iterateNotes() {
   iterateNotes(bar, measure, beat, note) {
-    if (this.beatCounter <= 0) return;
+    // if (this.beatCounter <= 0) return;
 
-    setTimeout(() => {
+    if(!this.paused) {
 
-      if(this.bars[bar-1][measure-1][beat-1][note-1]) {
-        // console.log(`playing note ${[bar-1,measure-1,beat-1,note-1]}`)
-        switch(note-1) {
-          case 0:
-            this.playNote(this.perc1Sound)
-            break
-          case 1:
-            this.playNote(this.perc2Sound)
-            break
-          case 2:
-            this.playNote(this.perc3Sound)
-            break
-          case 3:
-            this.playNote(this.bass1Sound)
-            break
-          case 4:
-            this.playNote(this.bass2Sound)
-            break
-          case 5:
-            this.playNote(this.bass3Sound)
-            break
-          case 6:
-            this.playNote(this.bass4Sound)
-            break
-          case 7:
-            this.playNote(this.bass5Sound)
-            break
-          case 8:
-            this.playNote(this.melody1Sound)
-            break
-          case 9:
-            this.playNote(this.melody2Sound)
-            break
-          case 10:
-            this.playNote(this.melody3Sound)
-            break
-          case 11:
-            this.playNote(this.melody4Sound)
-            break
-          case 12:
-            this.playNote(this.melody5Sound)
-            break
+      setTimeout(() => {
+
+        if(this.bars[this.barPlaying-1][this.measurePlaying-1][this.beatPlaying-1][this.notePlaying-1]) {
+        // if(this.bars[bar-1][measure-1][beat-1][note-1]) {
+          // console.log(`playing note ${[bar-1,measure-1,beat-1,note-1]}`)
+          switch(note-1) {
+            case 0:
+              this.playNote(this.perc1Sound)
+              break
+            case 1:
+              this.playNote(this.perc2Sound)
+              break
+            case 2:
+              this.playNote(this.perc3Sound)
+              break
+            case 3:
+              this.playNote(this.bass1Sound)
+              break
+            case 4:
+              this.playNote(this.bass2Sound)
+              break
+            case 5:
+              this.playNote(this.bass3Sound)
+              break
+            case 6:
+              this.playNote(this.bass4Sound)
+              break
+            case 7:
+              this.playNote(this.bass5Sound)
+              break
+            case 8:
+              this.playNote(this.melody1Sound)
+              break
+            case 9:
+              this.playNote(this.melody2Sound)
+              break
+            case 10:
+              this.playNote(this.melody3Sound)
+              break
+            case 11:
+              this.playNote(this.melody4Sound)
+              break
+            case 12:
+              this.playNote(this.melody5Sound)
+              break
+          }
+        } else {
         }
-      } else {
-      }
-      note++;
-      if(note>13) {
-        note=1
-        beat++
-      }
-      if(beat>4) {
-        beat=1
-        measure++
-      }
-      if(measure>4) {
-        measure=1
-        bar++
-      }
-      if(bar>4) {
-        bar=1
-      }
+        this.notePlaying++;
+        if(this.notePlaying>13) {
+          this.notePlaying=1
+          this.beatPlaying++
+        }
+        if(this.beatPlaying>4) {
+          this.beatPlaying=1
+          this.measurePlaying++
+        }
+        if(this.measurePlaying>4) {
+          this.measurePlaying=1
+          this.barPlaying++
+        }
+        if(this.barPlaying>4) {
+          this.barPlaying=1
+        }
 
-      --this.beatCounter
-      this.iterateNotes(bar, measure, beat, note)
+        --this.beatCounter
 
-    }, 15);
+        ++this.beatsPlayed
+        if(this.beatsPlayed > 832) {
+          this.beatsPlayed = 0
+        }
+
+        this.iterateNotes(this.barPlaying, this.measurePlaying, this.beatPlaying, this.notePlaying)
+
+      }, 15);
+    }
+  }
+
+  getTrackBarRot() {
+    let rotation = (this.beatsPlayed/this.totalNotes)*360
+    return rotation
+  }
+  getTrackBarRotStr() {
+    let rotStr = `rotate(${this.getTrackBarRot()-90}deg)`
+    return rotStr
   }
 
   compressThis(uncompressed) {
     let compressed = ""
 
-    let totalNotes = 4*4*4*13
     let note = 1
     let beat = 1
     let measure = 1
@@ -286,7 +320,7 @@ export class AppComponent {
 
     comboType = this.bars[0][0][0][0]
 
-    for(let i=0;i<totalNotes;i++) {
+    for(let i=0;i<this.totalNotes;i++) {
       if(comboType === this.bars[bar-1][measure-1][beat-1][note-1]) {
       } else {
         if(comboType) {
@@ -366,7 +400,6 @@ export class AppComponent {
 
     let decompressed = this.returnBars()
 
-    let totalNotes = 4*4*4*13
     let note = 1
     let beat = 1
     let measure = 1
@@ -380,7 +413,7 @@ export class AppComponent {
          .map(v => Array(parseInt(v.substr(1))).fill(v.substr(0, 1) === 't'))
          .reduce((m, a) => m.concat(a), [])
 
-    for(let i=0;i<totalNotes;i++) {
+    for(let i=0;i<this.totalNotes;i++) {
 
       decompressed[bar-1][measure-1][beat-1][note-1] = decomPass1[i]
 
@@ -418,13 +451,12 @@ export class AppComponent {
   }
 
   randomizeIt() {
-    let totalNotes = 4*4*4*13
     let note = 1
     let beat = 1
     let measure = 1
     let bar = 1
 
-    for(let i=0;i<totalNotes;i++) {
+    for(let i=0;i<this.totalNotes;i++) {
 
       this.bars[bar-1][measure-1][beat-1][note-1] = Math.round(Math.random())
 
