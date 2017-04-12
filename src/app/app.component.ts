@@ -8,12 +8,12 @@ import lzw from "node-lzw"
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  // beats
-  notes = []
+  // notes
   // 3 instruments, 13 beats - 3 percussion, 5 bass, 5 melody
-  // beat rows are made up of the instruments' beats
+  notes = []
+  // beats are made up of notes
   beats = []
-  // a measure is made up of rows of beats from instruments
+  // a measure is made up of rows of beats
   measures = []
   // a bar is made up of measures
   bars = []
@@ -24,38 +24,56 @@ export class AppComponent {
 
   constructor(private activatedRoute: ActivatedRoute) {
     console.log("Mandachord warming up")
-    this.setupMandachrod()
 
     // subscribe to router event
     this.activatedRoute.queryParams.subscribe((params: Params) => {
+      // copies the song code in the URL and makes it the main song code
       this.songCode = params['song'];
       if(this.songCode) {
-        // console.log(this.songCode);
-        // console.log(window.location.href)
         this.decodeURL()
       }
     })
+
+    this.setupMandachrod()
   }
 
   songCode = ""
 
+  /*
+    Returns the song code wrapped with HTTP protocol and local domain
+
+    @returns {String} Formatted URL
+  **/
   getSongURL() {
     return `${location.protocol}//${window.location.host}?song=${this.songCode}`
   }
 
+
+  /*
+    Setup the main bars array with a new one
+  **/
   setupMandachrod() {
     this.bars = this.returnBars()
   }
 
+  /*
+    Returns a new array of notes
+
+    @returns {Array} New notes
+  **/
   returnNotes() {
     let notes = []
     for(let i=0; i<13; i++) {
-      // notes.push(false)
-      notes.push(0)
+      notes.push(false)
     }
     return notes
   }
 
+  /*
+    Returns a new array of beats, with notes
+
+    @returns {Array} New beats, with notes
+  **/
   returnBeats() {
     let beats = []
     for(let i=0; i<4; i++) {
@@ -64,6 +82,11 @@ export class AppComponent {
     return beats
   }
 
+  /*
+    Returns a new array of measures, with beats and notes
+
+    @returns {Array} New measures, with beats and notes
+  **/
   returnMeasures() {
     let measures = []
     for(let i=0; i<4; i++) {
@@ -72,6 +95,11 @@ export class AppComponent {
     return measures
   }
 
+  /*
+    Returns a new array of bars, with measures, beats and notes
+
+    @returns {Array} New bars, with measures, beats and notes
+  **/
   returnBars() {
     let bars = []
     for(let i=0; i<4; i++) {
@@ -80,39 +108,127 @@ export class AppComponent {
     return bars
   }
 
+  /*
+    Encodes the song code to be used in the shareable URL
+  **/
   encodeURL() {
     this.songCode = this.compressThis(this.bars)
-    // this.songCode = btoa(JSON.stringify(this.bars))
   }
 
+  /*
+    Decodes the song code from the URL
+  **/
   decodeURL() {
     this.bars = this.decompressThis(this.songCode)
-    // this.bars = JSON.parse(atob(this.songCode))
-    // console.log(this.bars)
   }
 
+  /*
+    Simple function to log whatever comes in
+
+    @param {Object} obj - anything
+  **/
   print(obj) {
     console.log(obj)
   }
 
-  toggleBeat(event) {
-    console.log("toggling beat")
+  /*
+    Events to be done when a beat is clicked
 
+    @param {Event} event - Angular DOM event
+  **/
+  toggleNote(event) {
     let id = event.target.id
     let idl = id.length
 
+    // finds the beat in the sepearate arrays
     let barMatch = parseInt(`${id[idl-8]}${id[idl-7]}`)
     let measureMatch = parseInt(`${id[idl-6]}${id[idl-5]}`)
     let beatMatch = parseInt(`${id[idl-4]}${id[idl-3]}`)
     let noteMatch = parseInt(`${id[idl-2]}${id[idl-1]}`)
 
-    this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
-    = !this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
+    // check if the current bar has reached the maximum amount
+    // of the incoming type of note and disables turning it on
+    if(!this.barLimitReached([barMatch-1,measureMatch-1,beatMatch-1,noteMatch-1])
+        || this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]) {
 
-    this.encodeURL()
+      // toggles the true/false for the particular beat in the array
+      this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
+      = !this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
 
+      // refresh the shareable URL everytime a beat is toggled
+      this.encodeURL()
+    }
   }
 
+  percussionLimit = 26
+  bassLimit = 16
+  melodyLimit = 16
+
+  /*
+    Checks to see if the incoming note's ID number is in a bar that is at its limit
+    and is about to exceed it
+
+    @param {Array} incoming - the note's ID numbers (bars, measure, beat, note)
+    @returns {Boolean} bar has reached maximum number of that type of note
+  **/
+  barLimitReached(incoming) {
+    let notes = {
+      percussion: 0,
+      bass: 0,
+      melody: 0
+    }
+
+    let bar = this.bars[incoming[0]]
+
+    // loops through the selected bar, checking for notes that are on
+    // increments percussion number if between 0 and 3
+    // increments base number if between 3 and 7
+    // increments melody number if between 8 and 12
+    for(let i=0;i<bar.length;i++) { // bar of measures
+      for(let j=0;j<bar[i].length;j++) { // measure of beats
+        for(let k=0;k<bar[i][j].length;k++) { // beat of notes
+          if(bar[i][j][k]) {
+            if(k > -1 && k < 3) {
+              notes.percussion++
+            } else
+            if(k > 2 && k < 8) {
+              notes.bass++
+            } else
+            if(k > 7 && k < 13) {
+              notes.melody++
+            }
+          }
+        }
+      }
+    }
+
+    // returns true if any of the limits are exceeded
+    // with a custom error for each instrument
+    if((incoming[3] > -1 && incoming[3] < 3)
+        && (notes.percussion + 1) > this.percussionLimit) {
+      // error message here
+      return true
+    } else
+    if((incoming[3] > 2 && incoming[3] < 8)
+        && (notes.bass + 1) > this.bassLimit) {
+      // error message here
+      return true
+    } else
+    if((incoming[3] > 7 && incoming[3] < 13)
+        && (notes.melody + 1) > this.melodyLimit) {
+      // error message here1
+      return true
+    }
+
+    return false
+  }
+
+  /*
+    Checks if a note is on, in the array, with a given ID (structure: '<instrument><bar#><#measure#><beat#><note#>')
+
+    @param {String} id - ID of DOM note
+    @returns {Boolean} if note is on or not
+  **/
   isNoteOn(id) {
     let idl = id.length
 
@@ -125,6 +241,11 @@ export class AppComponent {
   }
 
   noteFreq = 440
+  /*
+    Changes the frequency to test, when the user lifts a key
+
+    @param {Event} Angular DOM event
+  **/
   changeFreq(event) {
     this.noteFreq = event.target.value
   }
@@ -132,15 +253,32 @@ export class AppComponent {
   context = new (AudioContext)();
   osc = this.context.createOscillator() // instantiate an oscillator
 
+  /*
+    Play a note of a specific frequency
+
+    @param {Number} freq - the frequency
+  **/
   playNote(freq) {
-    this.osc = this.context.createOscillator() // instantiate an oscillator
-    this.osc.type = 'sine' // this is the default - also square, sawtooth, triangle
-    this.osc.frequency.value = freq // Hz
-    this.osc.connect(this.context.destination) // connect it to the destination
-    this.osc.start() // start the oscillator
+    // instantiate an oscillator
+    this.osc = this.context.createOscillator()
+
+    // this is the default - also square, sawtooth, triangle
+    this.osc.type = 'sine'
+    this.osc.frequency.value = freq
+
+    // connect it to the destination
+    this.osc.connect(this.context.destination)
+
+    // start the oscillator
+    this.osc.start()
+
+    // stop the oscillator after 0.2 seconds
     this.osc.stop(this.context.currentTime + 0.2)
   }
 
+  /*
+    Stops the oscillator
+  **/
   stopNote() {
     this.osc.stop()
   }
@@ -159,17 +297,19 @@ export class AppComponent {
   melody4Sound = 100
   melody5Sound = 100
 
+
+  /*
+    Sets up the frequencies for the 12 notes
+  **/
   setupSounds() {
     // percussion
     // 200-300
-
     this.perc1Sound = 233
     this.perc2Sound = 266
     this.perc3Sound = 299
 
     // bass
     // 100-200
-
     this.bass1Sound = 110
     this.bass2Sound = 130
     this.bass3Sound = 150
@@ -178,7 +318,6 @@ export class AppComponent {
 
     // melody
     // 300-400
-
     this.melody1Sound = 310
     this.melody2Sound = 330
     this.melody3Sound = 350
@@ -186,27 +325,32 @@ export class AppComponent {
     this.melody5Sound = 390
   }
 
+  /*
+    Plays the notes in a linear sequence
+  **/
   playSoundsLinear() {
     let note = 1
     let beat = 1
     let measure = 1
     let bar = 1
+
+    // sets the frequencies
     this.setupSounds()
 
-    this.beatCounter = this.totalNotes
+    // plays the notes in the array, starting at 1,1,1,1
     this.iterateNotes(bar, measure, beat, note)
-
   }
 
-  beatCounter = 0
   beatsPlayed = 0
   barPlaying = 1
   measurePlaying = 1
   beatPlaying = 1
   notePlaying = 1
 
+  /*
+    Resets the playback back to the start
+  **/
   resetPlayback() {
-    console.log("track resetting")
     this.beatsPlayed = 0
     this.barPlaying = 1
     this.measurePlaying = 1
@@ -214,17 +358,26 @@ export class AppComponent {
     this.notePlaying = 1
   }
 
-  // iterateNotes() {
-  iterateNotes(bar, measure, beat, note) {
-    // if (this.beatCounter <= 0) return;
+  /*
+    Iterates over the notes while unpaused
 
+    @param {Number} bar - bar to play
+    @param {Number} measure - measure to play
+    @param {Number} beat - beat to play
+    @param {Number} note - note to play
+  **/
+  iterateNotes(bar, measure, beat, note) {
+
+    // pauses playback if paused
     if(!this.paused) {
 
+      //sets up a timeout to allow space between beats being played
       setTimeout(() => {
 
+        // if the current beat is "on", play a sound
         if(this.bars[this.barPlaying-1][this.measurePlaying-1][this.beatPlaying-1][this.notePlaying-1]) {
-        // if(this.bars[bar-1][measure-1][beat-1][note-1]) {
-          // console.log(`playing note ${[bar-1,measure-1,beat-1,note-1]}`)
+
+          // switch to determine which sound should be played, depending on the note number (0-2 percussion, 3-7 bass, 8-12 melody)
           switch(note-1) {
             case 0:
               this.playNote(this.perc1Sound)
@@ -266,47 +419,80 @@ export class AppComponent {
               this.playNote(this.melody5Sound)
               break
           }
-        } else {
         }
-        this.notePlaying++;
+
+        // increment note
+        this.notePlaying++
+
+        // if note exceeds threshold, reset it
+        // increment beat
         if(this.notePlaying>13) {
           this.notePlaying=1
           this.beatPlaying++
         }
+
+        // if beat exceeds threshold, reset it
+        // increment measure
         if(this.beatPlaying>4) {
           this.beatPlaying=1
           this.measurePlaying++
         }
+
+        // if measure exceeds threshold, reset it
+        // increment bar
         if(this.measurePlaying>4) {
           this.measurePlaying=1
           this.barPlaying++
         }
+
+        // if bar exceeds threshold, reset it
+        // this also resets the song to the start
         if(this.barPlaying>4) {
           this.barPlaying=1
         }
 
-        --this.beatCounter
-
+        // increment the number of beats played, currently used for trackbar rotation
         ++this.beatsPlayed
-        if(this.beatsPlayed > 832) {
+
+        // if total beats played exceeds total notes(832), reset it
+        if(this.beatsPlayed > this.totalNotes) {
           this.beatsPlayed = 0
         }
 
+        // recursively call this function to play the next note
         this.iterateNotes(this.barPlaying, this.measurePlaying, this.beatPlaying, this.notePlaying)
 
-      }, 15);
+      }, 15)
     }
   }
 
+  /*
+    Gets the trackbar rotation as a number
+
+    @returns {Number} rotation
+  **/
   getTrackBarRot() {
     let rotation = (this.beatsPlayed/this.totalNotes)*360
     return rotation
   }
+
+  /*
+    Gets the trackbar rotation as a string ready for use as a CSS transform
+
+    @returns {String} Rotation as a CSS transform
+  **/
   getTrackBarRotStr() {
     let rotStr = `rotate(${this.getTrackBarRot()-90}deg)`
     return rotStr
   }
 
+  /*
+    Compresses the input (bars array) into a short string
+    Max length of ~240 characters (song code)
+
+    @param {Array} uncompressed - the bars array to be compressed
+    @returns {String} The compressed string
+  **/
   compressThis(uncompressed) {
     let compressed = ""
 
@@ -318,55 +504,92 @@ export class AppComponent {
     let combo = 0
     let comboType = false
 
+    // sets up the combo to start with the first note's type (true/false)
     comboType = this.bars[0][0][0][0]
 
+    // loops through all the notes in that bars array
     for(let i=0;i<this.totalNotes;i++) {
-      if(comboType === this.bars[bar-1][measure-1][beat-1][note-1]) {
-      } else {
+
+      // if the current note doesn't match the current combo's type,
+      // add a letter and number representing the type and chain length
+      // to the compressed array (first pass)
+      if(comboType != this.bars[bar-1][measure-1][beat-1][note-1]) {
+
+        // differentiate what the type is
         if(comboType) {
           compressed += `t${combo}`
         } else {
           compressed += `f${combo}`
         }
+
+        // reset combo, change combo type to the current note's type
         combo = 0
         comboType = this.bars[bar-1][measure-1][beat-1][note-1]
       }
 
+      // increment combo, will always be at least 1
       combo++
+
+      // increment note
       note++;
+
+      // if note exceeds threshold, reset it
+      // increment beat
       if(note>13) {
         note=1
         beat++
       }
+
+      // if beat exceeds threshold, reset it
+      // increment measure
       if(beat>4) {
         beat=1
         measure++
       }
+
+      // if measure exceeds threshold, reset it
+      // increment bar
       if(measure>4) {
         measure=1
         bar++
       }
+
+      // if bar exceeds threshold, reset it (for safety)
       if(bar>4) {
         bar=1
       }
     }
+
+    // add the final combo to the string
     if(comboType) {
       compressed += `t${combo}`
     } else {
       compressed += `f${combo}`
     }
 
+    // do the second pass of the compression
     compressed = this.replacePass(compressed, false)
 
     return compressed
   }
 
+  /*
+    Second pass of compression, first pass of decompression
+
+    @param {String} input - the string to compress or decompress
+    @param {Boolean} decompressing - whether to compress or decompress
+    @returns {String} compressed or decompressed string
+  **/
   replacePass(input, decompressing) {
     let output = ""
 
+    // checks to see if we're compressing or decompressing
     if(decompressing) {
+
+      // decode the lzw-encoded string
       output = lzw.decode(input)
 
+      // replace various shortenings with the long versions
       output = output.replace(/m/g, "lh") // ftf
                      .replace(/l/g, "hg") // ft
                      .replace(/n/g, "kg") // tft
@@ -378,6 +601,8 @@ export class AppComponent {
                      .replace(/g/g, "t1") // t1, t10-t19
 
     } else {
+
+      // replace various parts of the first pass with short, 1 character, parts
       output = input.replace(/t1/g, "g") // t1, t10-t19
                     .replace(/t2/g, "o") // t2, t20-t29
                     .replace(/f1/g, "h") // f1, f10-f19
@@ -387,17 +612,26 @@ export class AppComponent {
                     .replace(/kg/g, "n") // tft
                     .replace(/hg/g, "l") // ft
                     .replace(/lh/g, "m") // ftf
-      console.log(output)
 
+      // encode the string using lzw-encoding
       output = lzw.encode(output)
     }
 
     return output
   }
 
+  /*
+    Decompresses the input (song code) into an array (the bars array)
+
+    @param {Array} uncompressed - the bars array to be compressed
+    @returns {String} The compressed string
+  **/
   decompressThis(compressed) {
+
+    // do the first pass of the decompression
     compressed = this.replacePass(compressed, true)
 
+    // setup a new bars array to be filled
     let decompressed = this.returnBars()
 
     let note = 1
@@ -405,42 +639,56 @@ export class AppComponent {
     let measure = 1
     let bar = 1
 
-    let combo = 0
-    let comboType = false
-
+    // unravel the first pass decompressed string into a single array of booleans
     let decomPass1 = compressed.split(/(\w\d+)/)
          .filter(i => i)
          .map(v => Array(parseInt(v.substr(1))).fill(v.substr(0, 1) === 't'))
          .reduce((m, a) => m.concat(a), [])
 
+    // loop through the array using the presumed size (fails horribly now, TODO fail gracefully)
+    // done purposefully to enforce failure if not expected size
     for(let i=0;i<this.totalNotes;i++) {
 
+      // set new song array note to the value of the decompressed array
       decompressed[bar-1][measure-1][beat-1][note-1] = decomPass1[i]
 
+      // increment note
       note++;
+
+      // if note exceeds threshold, reset it
+      // increment beat
       if(note>13) {
         note=1
         beat++
       }
+
+      // if beat exceeds threshold, reset it
+      // increment measure
       if(beat>4) {
         beat=1
         measure++
       }
+
+      // if measure exceeds threshold, reset it
+      // increment bar
       if(measure>4) {
         measure=1
         bar++
       }
+
+      // if bar exceeds threshold, reset it (for safety)
       if(bar>4) {
         bar=1
       }
     }
 
-    console.log(decompressed)
     return decompressed
   }
 
+  /*
+    Copies the URL to the clipboard
+  **/
   copyURL() {
-    console.log("copying to clipboard")
     let listener  = e => {
       e.clipboardData.setData("text/plain", this.getSongURL())
       e.preventDefault()
@@ -450,6 +698,9 @@ export class AppComponent {
     document.removeEventListener("copy", listener)
   }
 
+  /*
+    Randomizes the beats to create a random song
+  **/
   randomizeIt() {
     let note = 1
     let beat = 1
@@ -458,21 +709,64 @@ export class AppComponent {
 
     for(let i=0;i<this.totalNotes;i++) {
 
-      this.bars[bar-1][measure-1][beat-1][note-1] = Math.round(Math.random())
+      // check if values are below 10 and prepend a 0, if so
+      let barStr = bar<10 ? `0${bar}` : bar
+      let measureStr = measure<10 ? `0${measure}` : measure
+      let beatStr = beat<10 ? `0${beat}` : beat
+      let noteStr = note<10 ? `0${note}` : note
 
+      let instrument = "percussion"
+
+      // check what instrument it is
+      if(note > -1 && note < 3) {
+        instrument = "percussion"
+      } else
+      if(note > 2 && note < 8) {
+        instrument = "bass"
+      } else
+      if(note > 7 && note < 13) {
+        instrument = "melody"
+      }
+
+      // randomly toggle the note... or not
+      // biased toward not toggling (more likely to be 0), since we have a low limit
+      if(Math.round(Math.random()/1.5)) {
+        // debugger;
+        // fake object it is expecting with our data
+        let fakeObject = {
+          target: {
+            id: `${instrument}${barStr}${measureStr}${beatStr}${noteStr}`
+          }
+        }
+        console.log(fakeObject.target.id)
+        this.toggleNote(fakeObject)
+      }
+
+      // increment note
       note++;
+
+      // if note exceeds threshold, reset it
+      // increment beat
       if(note>13) {
         note=1
         beat++
       }
+
+      // if beat exceeds threshold, reset it
+      // increment measure
       if(beat>4) {
         beat=1
         measure++
       }
+
+      // if measure exceeds threshold, reset it
+      // increment bar
       if(measure>4) {
         measure=1
         bar++
       }
+
+      // if bar exceeds threshold, reset it (for safety)
       if(bar>4) {
         bar=1
       }
