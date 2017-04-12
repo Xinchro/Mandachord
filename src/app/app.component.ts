@@ -136,7 +136,7 @@ export class AppComponent {
 
     @param {Event} event - Angular DOM event
   **/
-  toggleBeat(event) {
+  toggleNote(event) {
     let id = event.target.id
     let idl = id.length
 
@@ -709,7 +709,38 @@ export class AppComponent {
 
     for(let i=0;i<this.totalNotes;i++) {
 
-      this.bars[bar-1][measure-1][beat-1][note-1] = Math.round(Math.random())
+      // check if values are below 10 and prepend a 0, if so
+      let barStr = bar<10 ? `0${bar}` : bar
+      let measureStr = measure<10 ? `0${measure}` : measure
+      let beatStr = beat<10 ? `0${beat}` : beat
+      let noteStr = note<10 ? `0${note}` : note
+
+      let instrument = "percussion"
+
+      // check what instrument it is
+      if(note > -1 && note < 3) {
+        instrument = "percussion"
+      } else
+      if(note > 2 && note < 8) {
+        instrument = "bass"
+      } else
+      if(note > 7 && note < 13) {
+        instrument = "melody"
+      }
+
+      // randomly toggle the note... or not
+      // biased toward not toggling (more likely to be 0), since we have a low limit
+      if(Math.round(Math.random()/1.5)) {
+        // debugger;
+        // fake object it is expecting with our data
+        let fakeObject = {
+          target: {
+            id: `${instrument}${barStr}${measureStr}${beatStr}${noteStr}`
+          }
+        }
+        console.log(fakeObject.target.id)
+        this.toggleNote(fakeObject)
+      }
 
       // increment note
       note++;
