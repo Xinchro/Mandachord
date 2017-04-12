@@ -146,19 +146,88 @@ export class AppComponent {
     let beatMatch = parseInt(`${id[idl-4]}${id[idl-3]}`)
     let noteMatch = parseInt(`${id[idl-2]}${id[idl-1]}`)
 
-    // toggles the true/false for the particular beat in the array
-    this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
-    = !this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
+    // check if the current bar has reached the maximum amount
+    // of the incoming type of note and disables turning it on
+    if(!this.barLimitReached([barMatch-1,measureMatch-1,beatMatch-1,noteMatch-1])
+        || this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]) {
 
-    // refresh the shareable URL everytime a beat is toggled
-    this.encodeURL()
+      // toggles the true/false for the particular beat in the array
+      this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
+      = !this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
+
+      // refresh the shareable URL everytime a beat is toggled
+      this.encodeURL()
+    }
+  }
+
+  percussionLimit = 26
+  bassLimit = 16
+  melodyLimit = 16
+
+  /*
+    Checks to see if the incoming note's ID number is in a bar that is at its limit
+    and is about to exceed it
+
+    @param {Array} incoming - the note's ID numbers (bars, measure, beat, note)
+    @returns {Boolean} bar has reached maximum number of that type of note
+  **/
+  barLimitReached(incoming) {
+    let notes = {
+      percussion: 0,
+      bass: 0,
+      melody: 0
+    }
+
+    let bar = this.bars[incoming[0]]
+
+    // loops through the selected bar, checking for notes that are on
+    // increments percussion number if between 0 and 3
+    // increments base number if between 3 and 7
+    // increments melody number if between 8 and 12
+    for(let i=0;i<bar.length;i++) { // bar of measures
+      for(let j=0;j<bar[i].length;j++) { // measure of beats
+        for(let k=0;k<bar[i][j].length;k++) { // beat of notes
+          if(bar[i][j][k]) {
+            if(k > -1 && k < 3) {
+              notes.percussion++
+            } else
+            if(k > 2 && k < 8) {
+              notes.bass++
+            } else
+            if(k > 7 && k < 13) {
+              notes.melody++
+            }
+          }
+        }
+      }
+    }
+
+    // returns true if any of the limits are exceeded
+    // with a custom error for each instrument
+    if((incoming[3] > -1 && incoming[3] < 3)
+        && (notes.percussion + 1) > this.percussionLimit) {
+      // error message here
+      return true
+    } else
+    if((incoming[3] > 2 && incoming[3] < 8)
+        && (notes.bass + 1) > this.bassLimit) {
+      // error message here
+      return true
+    } else
+    if((incoming[3] > 7 && incoming[3] < 13)
+        && (notes.melody + 1) > this.melodyLimit) {
+      // error message here1
+      return true
+    }
+
+    return false
   }
 
   /*
     Checks if a note is on, in the array, with a given ID (structure: '<instrument><bar#><#measure#><beat#><note#>')
 
     @param {String} id - ID of DOM note
-    @returns {Boolean}
+    @returns {Boolean} if note is on or not
   **/
   isNoteOn(id) {
     let idl = id.length
