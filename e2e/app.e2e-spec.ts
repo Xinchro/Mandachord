@@ -1,10 +1,10 @@
-import { OctaviaPage } from './app.po';
+import { MandachordPage } from './app.po';
 
-describe('octavia App', () => {
-  let page: OctaviaPage;
+describe('Mandachord App', () => {
+  let page: MandachordPage;
 
   beforeEach(() => {
-    page = new OctaviaPage();
+    page = new MandachordPage();
   });
 
   it('should display message saying app works', () => {
