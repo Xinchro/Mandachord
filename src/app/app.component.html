@@ -7,6 +7,85 @@
   <button *ngIf="!paused" class="playback-button playing" (click)="paused=true">Playing</button>
   <hr>
 </header>
+<section id="userControls" class="panel">
+  <header class="panel-header">
+    <p>Copy Bars</p>
+  </header>
+  <ul class="note-copy-list">
+    <header class="panel-header">
+      <p class="panel-title">From</p>
+      <p class="panel-title">To</p>
+    </header>
+    <li class="note-copy-item">
+      <p class="header">Bar 1</p>
+      <ul class="button-list">
+        <li>
+          <button (click)="copyBar(1, [2])">2</button>
+        </li>
+        <li>
+            <button (click)="copyBar(1, [3])">3</button>
+        </li>
+        <li>
+          <button (click)="copyBar(1, [4])">4</button>
+        </li>
+        <li>
+          <button (click)="copyBar(1, [2,3,4])">All</button>
+        </li>
+      </ul>
+    </li>
+    <li class="note-copy-item">
+      <p class="header">Bar 2</p>
+      <ul class="button-list">
+        <li>
+          <button (click)="copyBar(2, [1])">1</button>
+        </li>
+        <li>
+          <button (click)="copyBar(2, [3])">3</button>
+        </li>
+        <li>
+          <button (click)="copyBar(2, [4])">4</button>
+        </li>
+        <li>
+          <button (click)="copyBar(2, [1,3,4])">All</button>
+        </li>
+      </ul>
+    </li>
+    <li class="note-copy-item">
+      <p class="header">Bar 3</p>
+      <ul class="button-list">
+        <li>
+          <button (click)="copyBar(3, [1])">1</button>
+        </li>
+        <li>
+          <button (click)="copyBar(3, [2])">2</button>
+        </li>
+        <li>
+          <button (click)="copyBar(3, [4])">4</button>
+        </li>
+        <li>
+          <button (click)="copyBar(3, [1,2,4])">All</button>
+        </li>
+      </ul>
+    </li>
+    <li class="note-copy-item">
+      <p class="header">Bar 4</p>
+      <ul class="button-list">
+        <li>
+          <button (click)="copyBar(4, [1])">1</button>
+        </li>
+        <li>
+          <button (click)="copyBar(4, [2])">2</button>
+        </li>
+        <li>
+          <button (click)="copyBar(4, [3])">3</button>
+        </li>
+        <li>
+          <button (click)="copyBar(4, [1,2,3])">All</button>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</section>
 <section id="controlPanel" class="panel">
   <h2>dev panel</h2>
   <button (click)="copyURL()">Copy URL</button>

@@ -29,6 +29,74 @@ header {
   background: rgba(0,0,0,0.5);
   text-align: center;
 }
+.panel .panel-header {
+  display: flex;
+  flex-flow: row;
+  margin: 0;
+  padding: 0;
+}
+.panel .panel-header p {
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
+}
+.panel .panel-header.split .panel-title {
+  display: inline-block;
+  width: 50%;
+  margin: 0;
+  padding: 0;
+  background: pink;
+  box-shadow: inset 0 0 0 1px black;
+}
+.panel .note-copy-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-flow: column;
+}
+.panel .note-copy-list .note-copy-item {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+}
+.panel .note-copy-list .note-copy-item .header {
+  background: cyan;
+  box-shadow: inset 0 0 0 1px black;
+  display: inline-block;
+  width: 50%;
+}
+.panel .note-copy-list .note-copy-item .button-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+.panel .note-copy-list .note-copy-item .button-list li {
+  display: flex;
+  flex-grow: 1;
+}
+.panel .note-copy-list .note-copy-item .button-list li button {
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px black;
+  width: 100%;
+  border: none;
+}
+.panel .note-copy-list .note-copy-item .button-list li button:hover {
+  background: white;
+}
+
+
+#userControls {
+  right: 0;
+  left: auto;
+  width: 25%;
+}
 
 .bar-label {
 

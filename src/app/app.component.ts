@@ -699,6 +699,24 @@ export class AppComponent {
   }
 
   /*
+    Copies the notes from one bar to one other or many others
+
+    @param {Number} from - number of the bar
+    @param {Array} to - array of bars to copy to
+  **/
+  copyBar(from, to) {
+    for (var i=0;i<this.bars[from-1].length;i++) { // bar
+      for (var j=0;j<this.bars[from-1][i].length;j++) { // measure
+        for (var k=0;k<this.bars[from-1][i][j].length;k++) { // beat
+          for (var l=0;l<to.length;l++) {
+            this.bars[to[l]-1][i][j][k] = this.bars[from-1][i][j][k]
+          }
+        }
+      }
+    }
+  }
+
+  /*
     Randomizes the beats to create a random song
   **/
   randomizeIt() {
