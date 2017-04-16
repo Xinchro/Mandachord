@@ -750,9 +750,9 @@ export class AppComponent {
     @param {Array} to - array of bars to copy to
   **/
   copyBar(from, to, noteType) {
-    for (var i=0;i<this.bars[from-1].length;i++) { // bar
-      for (var j=0;j<this.bars[from-1][i].length;j++) { // measure
-        for (var k=0;k<this.bars[from-1][i][j].length;k++) { // beat
+    for (var i=0;i<this.bars[from-1].length;i++) { // measure
+      for (var j=0;j<this.bars[from-1][i].length;j++) { // beat
+        for (var k=0;k<this.bars[from-1][i][j].length;k++) { // notes
           for (var l=0;l<to.length;l++) {
             if((noteType === "all")
               || (noteType === "percussion" && k>-1 && k<3)
@@ -774,10 +774,10 @@ export class AppComponent {
     @param {Array} to - array of measures to copy to
   **/
   copyMeasure(bar, from, to) {
-    for (var j=0;j<this.bars[parseInt(this.copyFromMeasureBar)-1].length;j++) { // measure
-      for (var k=0;k<this.bars[parseInt(this.copyFromMeasureBar)-1][j].length;k++) { // beat
+    for (var j=0;j<this.bars[bar-1][from-1].length;j++) { // beat
+      for (var k=0;k<this.bars[bar-1][from-1][j].length;k++) { // notes
         for (var l=0;l<to.length;l++) {
-          this.bars[parseInt(this.copyFromMeasureBar)-1][to[l]-1][j][k] = this.bars[parseInt(this.copyFromMeasureBar)-1][from-1][j][k]
+          this.bars[bar-1][to[l]-1][j][k] = this.bars[bar-1][from-1][j][k]
         }
       }
     }
