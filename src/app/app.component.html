@@ -46,6 +46,13 @@
     </header>
     <p class="guide">Copies the measure(4 beats) within the same bar</p>
     <section class="selections">
+      <p>Beats</p>
+      <select name="MeasureBarCopySelectNotes" id="MeasureBarCopySelectNotes" [(ngModel)]="copyBarMeasureNoteType">
+        <option value="all">all</option>
+        <option value="percussion">percussion</option>
+        <option value="bass">bass</option>
+        <option value="melody">melody</option>
+      </select>
       <p>From Bar</p>
       <select name="measureBarCopySelectFrom" id="measureBarCopySelectFrom" [(ngModel)]="copyFromMeasureBar">
         <option value="1">1</option>

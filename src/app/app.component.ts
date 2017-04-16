@@ -737,9 +737,9 @@ export class AppComponent {
   **/
   doCopyMeasure() {
     if(this.copyToMeasure === "all") {
-      this.copyMeasure(this.copyFromMeasureBar, this.copyFromMeasure, [1,2,3,4])
+      this.copyMeasure(this.copyFromMeasureBar, this.copyFromMeasure, [1,2,3,4], this.copyBarMeasureNoteType)
     } else {
-      this.copyMeasure(this.copyFromMeasureBar, this.copyFromMeasure, [this.copyToMeasure])
+      this.copyMeasure(this.copyFromMeasureBar, this.copyFromMeasure, [this.copyToMeasure], this.copyBarMeasureNoteType)
     }
   }
 
@@ -757,7 +757,7 @@ export class AppComponent {
             if((noteType === "all")
               || (noteType === "percussion" && k>-1 && k<3)
               || (noteType === "bass" && k>2 && k<8)
-              || (noteType === "melody" && k>7 && k<13)){
+              || (noteType === "melody" && k>7 && k<13)) {
               this.bars[to[l]-1][i][j][k] = this.bars[from-1][i][j][k]
             }
           }
@@ -773,11 +773,16 @@ export class AppComponent {
     @param {Number} from - number of the measure
     @param {Array} to - array of measures to copy to
   **/
-  copyMeasure(bar, from, to) {
+  copyMeasure(bar, from, to, noteType) {
     for (var j=0;j<this.bars[bar-1][from-1].length;j++) { // beat
       for (var k=0;k<this.bars[bar-1][from-1][j].length;k++) { // notes
         for (var l=0;l<to.length;l++) {
-          this.bars[bar-1][to[l]-1][j][k] = this.bars[bar-1][from-1][j][k]
+          if((noteType === "all")
+            || (noteType === "percussion" && k>-1 && k<3)
+            || (noteType === "bass" && k>2 && k<8)
+            || (noteType === "melody" && k>7 && k<13)) {
+            this.bars[bar-1][to[l]-1][j][k] = this.bars[bar-1][from-1][j][k]
+          }
         }
       }
     }
