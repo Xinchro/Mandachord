@@ -14,15 +14,22 @@
     </header>
     <p class="guide">Copies one bar to one or many others</p>
     <section class="selections">
+      <p>Beats</p>
+      <select name="barCopySelectNotes" id="barCopySelectNotes" [(ngModel)]="copyBarNoteType">
+        <option value="all">all</option>
+        <option value="percussion">percussion</option>
+        <option value="bass">bass</option>
+        <option value="melody">melody</option>
+      </select>
       <p>From Bar</p>
-      <select name="barCopySelectOne" id="barCopySelect1" [(ngModel)]="copyFromBar">
+      <select name="barCopySelectFrom" id="barCopySelectFrom" [(ngModel)]="copyFromBar">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
       <p>To Bar</p>
-      <select name="barCopySelectTwo" id="barCopySelect2" [(ngModel)]="copyToBar">
+      <select name="barCopySelectTo" id="barCopySelectTo" [(ngModel)]="copyToBar">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -40,21 +47,21 @@
     <p class="guide">Copies the measure(4 beats) within the same bar</p>
     <section class="selections">
       <p>From Bar</p>
-      <select name="measureCopySelectOne" id="measureCopySelect1" [(ngModel)]="copyFromMeasureBar">
+      <select name="measureBarCopySelectFrom" id="measureBarCopySelectFrom" [(ngModel)]="copyFromMeasureBar">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
       <p>Measure</p>
-      <select name="measureCopySelectOne" id="measureCopySelect1" [(ngModel)]="copyFromMeasure">
+      <select name="measureCopySelectFrom" id="measureCopySelectFrom" [(ngModel)]="copyFromMeasure">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
       <p>To Measure</p>
-      <select name="measureCopySelectTwo" id="measureCopySelect2" [(ngModel)]="copyToMeasure">
+      <select name="measureCopySelectTo" id="measureCopySelectTo" [(ngModel)]="copyToMeasure">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -98,7 +105,7 @@
         <path (click)="toggleNote($event)" d="m 434.326,24.132 -0.981,9.952 -0.763,7.75 -9.988,-0.491 -9.988,-0.491 -9.917,-0.487 10e-4,-10 v -7.787 l 9.988,0.49 9.987,0.491 9.988,0.491 1.673,0.082" stroke-linejoin="mitter" [ngClass]="{'note-on':isNoteOn('percussion01010102')}" id="percussion01010102" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-opacity:1" class="percussion beat"></path>
         <path (click)="toggleNote($event)" d="m 432.43,44.932 -0.981,9.952 -0.763,7.749 -9.988,-0.49 -9.988,-0.491 -8.173,-0.402 v -10 -7.787 l 9.988,0.491 9.988,0.491 9.917,0.487" stroke-linejoin="mitter" [ngClass]="{'note-on':isNoteOn('percussion01010103')}" id="percussion01010103" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-opacity:1" class="percussion beat"></path>
         <path (click)="toggleNote($event)" d="m 430.534,65.732 -0.98,9.952 -0.764,7.749 -9.988,-0.491 -9.988,-0.491 -6.429,-0.316 v -10 -7.786 l 9.988,0.49 9.988,0.491 8.173,0.402" stroke-linejoin="mitter" [ngClass]="{'note-on':isNoteOn('bass01010104')}" id="bass01010104" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-opacity:1" class="bass beat"></path>
-        <path (click)="squarebracketsquestion($event)" d="m 428.638,86.531 -0.98,9.952 -0.764,7.75 -9.988,-0.491 -9.988,-0.491 -4.686,-0.23 v -10 -7.787 l 9.988,0.491 9.988,0.49 6.43,0.316" stroke-linejoin="mitter" [ngClass]="{'note-on':isNoteOn('bass01010105')}" id="bass01010105" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-opacity:1" class="bass beat"></path>
+        <path (click)="toggleNote($event)" d="m 428.638,86.531 -0.98,9.952 -0.764,7.75 -9.988,-0.491 -9.988,-0.491 -4.686,-0.23 v -10 -7.787 l 9.988,0.491 9.988,0.49 6.43,0.316" stroke-linejoin="mitter" [ngClass]="{'note-on':isNoteOn('bass01010105')}" id="bass01010105" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-opacity:1" class="bass beat"></path>
         <path (click)="toggleNote($event)" d="m 426.742,107.331 -0.98,9.952 -0.764,7.749 -9.988,-0.49 -9.987,-0.491 -2.943,-0.145 v -10 -7.787 l 9.988,0.491 9.988,0.491 4.686,0.23" stroke-linejoin="mitter" [ngClass]="{'note-on':isNoteOn('bass01010106')}" id="bass01010106" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-opacity:1" class="bass beat"></path>
         <path (click)="toggleNote($event)" d="m 424.846,128.131 -0.98,9.952 -0.763,7.749 -9.988,-0.491 -9.988,-0.49 -1.2,-0.059 v -10 -7.787 l 9.988,0.49 9.988,0.491 2.943,0.145" stroke-linejoin="mitter" [ngClass]="{'note-on':isNoteOn('bass01010107')}" id="bass01010107" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-opacity:1" class="bass beat"></path>
         <path (click)="toggleNote($event)" d="m 422.95,148.931 -0.98,9.951 -0.763,7.75 -9.988,-0.491 -9.444,-0.464 v -10 -7.787 l 9.988,0.491 9.988,0.491 1.199,0.059" stroke-linejoin="mitter" [ngClass]="{'note-on':isNoteOn('bass01010108')}" id="bass01010108" inkscape:connector-curvature="0" style="stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-opacity:1" class="bass beat"></path>

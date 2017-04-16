@@ -716,20 +716,22 @@ export class AppComponent {
 
   copyFromBar = "1"
   copyToBar = "2"
+  copyBarNoteType = "all"
   /*
     Reacts to the selects for the bar copying
   **/
   doCopyBar() {
     if(this.copyToBar === "all") {
-      this.copyBar(this.copyFromBar, [1,2,3,4])
+      this.copyBar(this.copyFromBar, [1,2,3,4], this.copyBarNoteType)
     } else {
-      this.copyBar(this.copyFromBar, [this.copyToBar])
+      this.copyBar(this.copyFromBar, [this.copyToBar], this.copyBarNoteType)
     }
   }
 
   copyFromMeasureBar = "1"
   copyFromMeasure = "1"
   copyToMeasure = "2"
+  copyBarMeasureNoteType = "all"
   /*
     Reacts to the selects for the measure copying
   **/
@@ -747,12 +749,17 @@ export class AppComponent {
     @param {Number} from - number of the bar
     @param {Array} to - array of bars to copy to
   **/
-  copyBar(from, to) {
+  copyBar(from, to, noteType) {
     for (var i=0;i<this.bars[from-1].length;i++) { // bar
       for (var j=0;j<this.bars[from-1][i].length;j++) { // measure
         for (var k=0;k<this.bars[from-1][i][j].length;k++) { // beat
           for (var l=0;l<to.length;l++) {
-            this.bars[to[l]-1][i][j][k] = this.bars[from-1][i][j][k]
+            if((noteType === "all")
+              || (noteType === "percussion" && k>-1 && k<3)
+              || (noteType === "bass" && k>2 && k<8)
+              || (noteType === "melody" && k>7 && k<13)){
+              this.bars[to[l]-1][i][j][k] = this.bars[from-1][i][j][k]
+            }
           }
         }
       }
