@@ -8,83 +8,62 @@
   <hr>
 </header>
 <section id="userControls" class="panel">
-  <header class="panel-header">
-    <p>Copy Bars</p>
-  </header>
-  <ul class="note-copy-list">
+  <section class="tool">
     <header class="panel-header">
-      <p class="panel-title">From</p>
-      <p class="panel-title">To</p>
+      <p>Copy Bars</p>
     </header>
-    <li class="note-copy-item">
-      <p class="header">Bar 1</p>
-      <ul class="button-list">
-        <li>
-          <button (click)="copyBar(1, [2])">2</button>
-        </li>
-        <li>
-            <button (click)="copyBar(1, [3])">3</button>
-        </li>
-        <li>
-          <button (click)="copyBar(1, [4])">4</button>
-        </li>
-        <li>
-          <button (click)="copyBar(1, [2,3,4])">All</button>
-        </li>
-      </ul>
-    </li>
-    <li class="note-copy-item">
-      <p class="header">Bar 2</p>
-      <ul class="button-list">
-        <li>
-          <button (click)="copyBar(2, [1])">1</button>
-        </li>
-        <li>
-          <button (click)="copyBar(2, [3])">3</button>
-        </li>
-        <li>
-          <button (click)="copyBar(2, [4])">4</button>
-        </li>
-        <li>
-          <button (click)="copyBar(2, [1,3,4])">All</button>
-        </li>
-      </ul>
-    </li>
-    <li class="note-copy-item">
-      <p class="header">Bar 3</p>
-      <ul class="button-list">
-        <li>
-          <button (click)="copyBar(3, [1])">1</button>
-        </li>
-        <li>
-          <button (click)="copyBar(3, [2])">2</button>
-        </li>
-        <li>
-          <button (click)="copyBar(3, [4])">4</button>
-        </li>
-        <li>
-          <button (click)="copyBar(3, [1,2,4])">All</button>
-        </li>
-      </ul>
-    </li>
-    <li class="note-copy-item">
-      <p class="header">Bar 4</p>
-      <ul class="button-list">
-        <li>
-          <button (click)="copyBar(4, [1])">1</button>
-        </li>
-        <li>
-          <button (click)="copyBar(4, [2])">2</button>
-        </li>
-        <li>
-          <button (click)="copyBar(4, [3])">3</button>
-        </li>
-        <li>
-          <button (click)="copyBar(4, [1,2,3])">All</button>
-        </li>
-      </ul>
-    </li>
-  </ul>
+    <p class="guide">Copies one bar to one or many others</p>
+    <section class="selections">
+      <p>From Bar</p>
+      <select name="barCopySelectOne" id="barCopySelect1" [(ngModel)]="copyFromBar">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <p>To Bar</p>
+      <select name="barCopySelectTwo" id="barCopySelect2" [(ngModel)]="copyToBar">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="all">all</option>
+      </select>
+      <button (click)="doCopyBar()">Copy Bar</button>
+    </section>
+  </section>
+  <hr>
+  <section class="tool">
+    <header class="panel-header">
+      <p>Copy Measures</p>
+    </header>
+    <p class="guide">Copies the measure(4 beats) within the same bar</p>
+    <section class="selections">
+      <p>From Bar</p>
+      <select name="measureCopySelectOne" id="measureCopySelect1" [(ngModel)]="copyFromMeasureBar">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <p>Measure</p>
+      <select name="measureCopySelectOne" id="measureCopySelect1" [(ngModel)]="copyFromMeasure">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <p>To Measure</p>
+      <select name="measureCopySelectTwo" id="measureCopySelect2" [(ngModel)]="copyToMeasure">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="all">all</option>
+      </select>
+      <button (click)="doCopyMeasure()">Copy Measure</button>
+    </section>
+  </section>
 </section>
 <section id="controlPanel" class="panel">
   <h2>dev panel</h2>
@@ -96,12 +75,7 @@
   <input type="number" placeholder="Frequency(440)" (keyup)="changeFreq($event)">
   <button (click)="stopNote()">End beat</button>
   <hr>
-  <button (click)="compressThis(bars)">Compress</button>
-  <button (click)="decompressThis(songCode)">Decompress</button>
   <button (click)="randomizeIt()">Randomize</button>
-  <hr>
-  <p>Beats played: {{beatsPlayed}}</p>
-  <p>Trackbar rotation: {{getTrackBarRot()}}</p>
   <hr>
 </section>
 <section class="mandachord">

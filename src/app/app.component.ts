@@ -698,6 +698,49 @@ export class AppComponent {
     document.removeEventListener("copy", listener)
   }
 
+  loopBar(bar) {
+    this.loopBar([bar])
+  }
+
+  loopBars(bars) {
+
+  }
+
+  loopMeasure(measure) {
+    this.loopMeasures([measure])
+  }
+
+  loopMeasures(measures) {
+
+  }
+
+  copyFromBar = "1"
+  copyToBar = "2"
+  /*
+    Reacts to the selects for the bar copying
+  **/
+  doCopyBar() {
+    if(this.copyToBar === "all") {
+      this.copyBar(this.copyFromBar, [1,2,3,4])
+    } else {
+      this.copyBar(this.copyFromBar, [this.copyToBar])
+    }
+  }
+
+  copyFromMeasureBar = "1"
+  copyFromMeasure = "1"
+  copyToMeasure = "2"
+  /*
+    Reacts to the selects for the measure copying
+  **/
+  doCopyMeasure() {
+    if(this.copyToMeasure === "all") {
+      this.copyMeasure(this.copyFromMeasureBar, this.copyFromMeasure, [1,2,3,4])
+    } else {
+      this.copyMeasure(this.copyFromMeasureBar, this.copyFromMeasure, [this.copyToMeasure])
+    }
+  }
+
   /*
     Copies the notes from one bar to one other or many others
 
@@ -711,6 +754,23 @@ export class AppComponent {
           for (var l=0;l<to.length;l++) {
             this.bars[to[l]-1][i][j][k] = this.bars[from-1][i][j][k]
           }
+        }
+      }
+    }
+  }
+
+  /*
+    Copies the notes from one measure in a bar to one other or many other measures in that same bar
+
+    @param {Number} bar - number of the bar
+    @param {Number} from - number of the measure
+    @param {Array} to - array of measures to copy to
+  **/
+  copyMeasure(bar, from, to) {
+    for (var j=0;j<this.bars[parseInt(this.copyFromMeasureBar)-1].length;j++) { // measure
+      for (var k=0;k<this.bars[parseInt(this.copyFromMeasureBar)-1][j].length;k++) { // beat
+        for (var l=0;l<to.length;l++) {
+          this.bars[parseInt(this.copyFromMeasureBar)-1][to[l]-1][j][k] = this.bars[parseInt(this.copyFromMeasureBar)-1][from-1][j][k]
         }
       }
     }
