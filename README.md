@@ -13,14 +13,14 @@ Generated with [Angular CLI](https://github.com/angular/angular-cli).
     - Add highlight to notes being played
 - Features
   - Clear notes button
-  - Looping
-    - Loop single bar
-    - Loop range of bars
-  - Copying
-    - Ability to copy bar to bar
-    - Ability to copy bar to all 3 other bars
-    - Ability to copy measure to other measure in same bar
-    - Ability to copy measure to all other measures in same bar
+  - Looping ✓
+    - Loop single bar ✓
+    - Loop range of bars ✓
+  - Copying ✓
+    - Ability to copy bar to bar ✓
+    - Ability to copy bar to all 3 other bars ✓
+    - Ability to copy measure to other measure in same bar ✓
+    - Ability to copy measure to all other measures in same bar ✓
   - Note toggling
     - Allow for continuous click to toggle notes (holding down mouse button)
   - Volume

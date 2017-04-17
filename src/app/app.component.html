@@ -78,6 +78,29 @@
       <button (click)="doCopyMeasure()">Copy Measure</button>
     </section>
   </section>
+  <hr>
+  <section class="tool">
+    <header class="panel-header">
+      <p>Loop Bars</p>
+    </header>
+    <p class="guide">Loops from one bar to another</p>
+    <section class="selections">
+      <p>Start</p>
+      <select name="loopStartSelect" id="loopStartSelect" [(ngModel)]="loopStartBar" (ngModelChange)="resetPlayback()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <p>End</p>
+      <select name="loopEndSelect" id="loopEndSelect" [(ngModel)]="loopEndBar">
+        <option value="1" *ngIf="loopStartBar<2">1</option>
+        <option value="2" *ngIf="loopStartBar<3">2</option>
+        <option value="3" *ngIf="loopStartBar<4">3</option>
+        <option value="4">4</option>
+      </select>
+    </section>
+  </section>
 </section>
 <section id="controlPanel" class="panel">
   <h2>dev panel</h2>
