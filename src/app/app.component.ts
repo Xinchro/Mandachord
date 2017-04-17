@@ -341,7 +341,6 @@ export class AppComponent {
     this.iterateNotes(bar, measure, beat, note)
   }
 
-  beatsPlayed = 0
   barPlaying = 1
   measurePlaying = 1
   beatPlaying = 1
@@ -351,12 +350,14 @@ export class AppComponent {
     Resets the playback back to the start
   **/
   resetPlayback() {
-    this.beatsPlayed = 0
-    this.barPlaying = 1
+    this.barPlaying = this.loopStartBar
     this.measurePlaying = 1
     this.beatPlaying = 1
     this.notePlaying = 1
   }
+
+  loopStartBar = 1
+  loopEndBar = 4
 
   /*
     Iterates over the notes while unpaused
@@ -447,16 +448,8 @@ export class AppComponent {
 
         // if bar exceeds threshold, reset it
         // this also resets the song to the start
-        if(this.barPlaying>4) {
-          this.barPlaying=1
-        }
-
-        // increment the number of beats played, currently used for trackbar rotation
-        ++this.beatsPlayed
-
-        // if total beats played exceeds total notes(832), reset it
-        if(this.beatsPlayed > this.totalNotes) {
-          this.beatsPlayed = 0
+        if(this.barPlaying>this.loopEndBar) {
+          this.barPlaying=this.loopStartBar
         }
 
         // recursively call this function to play the next note
@@ -467,12 +460,26 @@ export class AppComponent {
   }
 
   /*
+    Gets the total number of beats that have been played
+
+    @returns {Number} total beats played
+  **/
+  getBeatsPlayed() {
+    return ((
+      ((this.barPlaying-1)*4*4*13)+
+      ((this.measurePlaying-1)*4*13)+
+      ((this.beatPlaying-1)*13)+
+      (this.notePlaying-1)
+    ))
+  }
+
+  /*
     Gets the trackbar rotation as a number
 
     @returns {Number} rotation
   **/
   getTrackBarRot() {
-    let rotation = (this.beatsPlayed/this.totalNotes)*360
+    let rotation = ((this.getBeatsPlayed())/this.totalNotes)*360
     return rotation
   }
 
@@ -696,6 +703,96 @@ export class AppComponent {
     document.addEventListener("copy", listener)
     document.execCommand("copy")
     document.removeEventListener("copy", listener)
+  }
+
+  loopBar(bar) {
+    this.loopBar([bar])
+  }
+
+  loopBars(bars) {
+
+  }
+
+  loopMeasure(measure) {
+    this.loopMeasures([measure])
+  }
+
+  loopMeasures(measures) {
+
+  }
+
+  copyFromBar = "1"
+  copyToBar = "2"
+  copyBarNoteType = "all"
+  /*
+    Reacts to the selects for the bar copying
+  **/
+  doCopyBar() {
+    if(this.copyToBar === "all") {
+      this.copyBar(this.copyFromBar, [1,2,3,4], this.copyBarNoteType)
+    } else {
+      this.copyBar(this.copyFromBar, [this.copyToBar], this.copyBarNoteType)
+    }
+  }
+
+  copyFromMeasureBar = "1"
+  copyFromMeasure = "1"
+  copyToMeasure = "2"
+  copyBarMeasureNoteType = "all"
+  /*
+    Reacts to the selects for the measure copying
+  **/
+  doCopyMeasure() {
+    if(this.copyToMeasure === "all") {
+      this.copyMeasure(this.copyFromMeasureBar, this.copyFromMeasure, [1,2,3,4], this.copyBarMeasureNoteType)
+    } else {
+      this.copyMeasure(this.copyFromMeasureBar, this.copyFromMeasure, [this.copyToMeasure], this.copyBarMeasureNoteType)
+    }
+  }
+
+  /*
+    Copies the notes from one bar to one other or many others
+
+    @param {Number} from - number of the bar
+    @param {Array} to - array of bars to copy to
+  **/
+  copyBar(from, to, noteType) {
+    for (var i=0;i<this.bars[from-1].length;i++) { // measure
+      for (var j=0;j<this.bars[from-1][i].length;j++) { // beat
+        for (var k=0;k<this.bars[from-1][i][j].length;k++) { // notes
+          for (var l=0;l<to.length;l++) {
+            if((noteType === "all")
+              || (noteType === "percussion" && k>-1 && k<3)
+              || (noteType === "bass" && k>2 && k<8)
+              || (noteType === "melody" && k>7 && k<13)) {
+              this.bars[to[l]-1][i][j][k] = this.bars[from-1][i][j][k]
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /*
+    Copies the notes from one measure in a bar to one other or many other measures in that same bar
+
+    @param {Number} bar - number of the bar
+    @param {Number} from - number of the measure
+    @param {Array} to - array of measures to copy to
+  **/
+  copyMeasure(bar, from, to, noteType) {
+    for (var j=0;j<this.bars[bar-1][from-1].length;j++) { // beat
+      for (var k=0;k<this.bars[bar-1][from-1][j].length;k++) { // notes
+        for (var l=0;l<to.length;l++) {
+          if((noteType === "all")
+            || (noteType === "percussion" && k>-1 && k<3)
+            || (noteType === "bass" && k>2 && k<8)
+            || (noteType === "melody" && k>7 && k<13)) {
+            this.bars[bar-1][to[l]-1][j][k] = this.bars[bar-1][from-1][j][k]
+          }
+        }
+      }
+    }
   }
 
   /*

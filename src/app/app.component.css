@@ -30,6 +30,21 @@ header {
   text-align: center;
 }
 
+.panel .tool .selections {
+  display: flex;
+  flex-flow: row;
+}
+.panel .tool .selections > * {
+  flex-grow: 1;
+}
+
+
+#userControls {
+  right: 0;
+  left: auto;
+  width: 25%;
+}
+
 .bar-label {
 
 }
