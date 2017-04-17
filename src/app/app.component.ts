@@ -459,6 +459,12 @@ export class AppComponent {
     }
   }
 
+  loopCheck() {
+    if(this.loopEndBar < this.loopStartBar) {
+      this.loopEndBar = this.loopStartBar
+    }
+  }
+
   /*
     Gets the total number of beats that have been played
 

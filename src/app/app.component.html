@@ -86,7 +86,7 @@
     <p class="guide">Loops from one bar to another</p>
     <section class="selections">
       <p>Start</p>
-      <select name="loopStartSelect" id="loopStartSelect" [(ngModel)]="loopStartBar" (ngModelChange)="resetPlayback()">
+      <select name="loopStartSelect" id="loopStartSelect" [(ngModel)]="loopStartBar" (ngModelChange)="loopCheck();resetPlayback()">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
