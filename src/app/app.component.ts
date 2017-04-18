@@ -1,6 +1,7 @@
 import { OnInit, OnDestroy, Component } from "@angular/core"
 import { Router, ActivatedRoute, Params } from "@angular/router"
 import lzw from "node-lzw"
+import Instruments from "webaudio-instruments"
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,8 @@ export class AppComponent {
   paused = true
 
   totalNotes = 4*4*4*13
+
+  player = new Instruments()
 
   constructor(private activatedRoute: ActivatedRoute) {
     console.log("Mandachord warming up")
@@ -155,6 +158,11 @@ export class AppComponent {
       this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
       = !this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]
 
+      // play the note if being toggled on
+      if(this.bars[barMatch-1][measureMatch-1][beatMatch-1][noteMatch-1]) {
+        this.playNote(noteMatch-1)
+      }
+
       // refresh the shareable URL everytime a beat is toggled
       this.encodeURL()
     }
@@ -250,79 +258,160 @@ export class AppComponent {
     this.noteFreq = event.target.value
   }
 
-  context = new (AudioContext)();
-  osc = this.context.createOscillator() // instantiate an oscillator
+  percussionInstrument = "beta"
+  bassInstrument = "druk"
+  melodyInstrument = "gamma"
+
+  masterVolume = 0.5
+  percussionInstrument1No = 128
+  percussionInstrument2No = 147
+  percussionInstrument3No = 171
+  percussionVolume = 1
+  percussionInstrumentFreq = [72,300,200]
+  bassInstrumentNo = 65
+  bassVolume = 1
+  bassInstrumentFreq = [35,37,40,43,45]
+  melodyInstrumentNo = 96
+  melodyVolume = 1
+  melodyInstrumentFreq = [40,42,45,48,50]
 
   /*
-    Play a note of a specific frequency
+    Play a specific note
 
-    @param {Number} freq - the frequency
+    @param {Number} note - the note to play
   **/
-  playNote(freq) {
-    // instantiate an oscillator
-    this.osc = this.context.createOscillator()
-
-    // this is the default - also square, sawtooth, triangle
-    this.osc.type = 'sine'
-    this.osc.frequency.value = freq
-
-    // connect it to the destination
-    this.osc.connect(this.context.destination)
-
-    // start the oscillator
-    this.osc.start()
-
-    // stop the oscillator after 0.2 seconds
-    this.osc.stop(this.context.currentTime + 0.2)
+  playNote(note) {
+    // switch to determine which sound should be played, depending on the note number (0-2 percussion, 3-7 bass, 8-12 melody)
+    switch(note) {
+      case 0:
+        this.playInstrument(
+          this.percussionInstrument1No,
+          this.percussionInstrumentFreq[2],
+          this.percussionVolume*this.masterVolume,
+          0,0.2) // perc
+        break
+      case 1:
+        this.playInstrument(
+          this.percussionInstrument2No,
+          this.percussionInstrumentFreq[1],
+          this.percussionVolume*this.masterVolume,
+          0,0.2) // perc
+        break
+      case 2:
+      if(this.percussionInstrument === "beta") {
+        this.playInstrument(
+          this.percussionInstrument3No,
+          this.percussionInstrumentFreq[0],
+          (this.percussionVolume*this.masterVolume)/2,
+          0,0.2) // perc
+      } else {
+        this.playInstrument(
+          this.percussionInstrument3No,
+          this.percussionInstrumentFreq[0],
+          this.percussionVolume*this.masterVolume,
+          0,0.2) // perc
+      }
+        break
+      case 3:
+        this.playInstrument(
+          this.bassInstrumentNo,
+          this.bassInstrumentFreq[4],
+          this.bassVolume*this.masterVolume,
+          0,0.2) // bass
+        break
+      case 4:
+        this.playInstrument(
+          this.bassInstrumentNo,
+          this.bassInstrumentFreq[3],
+          this.bassVolume*this.masterVolume,
+          0,0.2) // bass
+        break
+      case 5:
+        this.playInstrument(
+          this.bassInstrumentNo,
+          this.bassInstrumentFreq[2],
+          this.bassVolume*this.masterVolume,
+          0,0.2) // bass
+        break
+      case 6:
+        this.playInstrument(
+          this.bassInstrumentNo,
+          this.bassInstrumentFreq[1],
+          this.bassVolume*this.masterVolume,
+          0,0.2) // bass
+        break
+      case 7:
+        this.playInstrument(
+          this.bassInstrumentNo,
+          this.bassInstrumentFreq[0],
+          this.bassVolume*this.masterVolume,
+          0,0.2) // bass
+        break
+      case 8:
+        this.playInstrument(
+          this.melodyInstrumentNo,
+          this.melodyInstrumentFreq[4],
+          this.melodyVolume*this.masterVolume,
+          0,0.2) // melody
+        break
+      case 9:
+        this.playInstrument(
+          this.melodyInstrumentNo,
+          this.melodyInstrumentFreq[3],
+          this.melodyVolume*this.masterVolume,
+          0,0.2) // melody
+        break
+      case 10:
+        this.playInstrument(
+          this.melodyInstrumentNo,
+          this.melodyInstrumentFreq[2],
+          this.melodyVolume*this.masterVolume,
+          0,0.2) // melody
+        break
+      case 11:
+        this.playInstrument(
+          this.melodyInstrumentNo,
+          this.melodyInstrumentFreq[1],
+          this.melodyVolume*this.masterVolume,
+          0,0.2) // melody
+        break
+      case 12:
+        this.playInstrument(
+          this.melodyInstrumentNo,
+          this.melodyInstrumentFreq[0],
+          this.melodyVolume*this.masterVolume,
+          0,0.2) // melody
+        break
+    }
   }
 
-  /*
-    Stops the oscillator
-  **/
-  stopNote() {
-    this.osc.stop()
+  instruInst = 0
+  instruFreq = 72
+  instruVelo = 0.5
+  instruDela = 0
+  instruDura = 0.2
+
+  playInstrument(instrument, freq, velocity, delay, duration) {
+    this.player.play(
+      instrument,        // instrument: 24 is "Acoustic Guitar (nylon)"
+      freq,        // note: midi number or frequency in Hz (if > 127)
+      velocity,       // velocity: 0..1
+      delay,         // delay in seconds
+      duration        // duration in seconds
+    )
   }
 
-  perc1Sound = 100
-  perc2Sound = 100
-  perc3Sound = 100
-  bass1Sound = 100
-  bass2Sound = 100
-  bass3Sound = 100
-  bass4Sound = 100
-  bass5Sound = 100
-  melody1Sound = 100
-  melody2Sound = 100
-  melody3Sound = 100
-  melody4Sound = 100
-  melody5Sound = 100
+  setReverb(reverb) {
+    this.player._synth.setReverbLev(reverb)
+  }
 
-
-  /*
-    Sets up the frequencies for the 12 notes
-  **/
-  setupSounds() {
-    // percussion
-    // 200-300
-    this.perc1Sound = 233
-    this.perc2Sound = 266
-    this.perc3Sound = 299
-
-    // bass
-    // 100-200
-    this.bass1Sound = 110
-    this.bass2Sound = 130
-    this.bass3Sound = 150
-    this.bass4Sound = 170
-    this.bass5Sound = 190
-
-    // melody
-    // 300-400
-    this.melody1Sound = 310
-    this.melody2Sound = 330
-    this.melody3Sound = 350
-    this.melody4Sound = 370
-    this.melody5Sound = 390
+  prevInstru() {
+    this.instruInst--
+    this.playInstrument(this.instruInst,this.instruFreq,this.instruVelo,this.instruDela,this.instruDura)
+  }
+  nextInstru() {
+    this.instruInst++
+    this.playInstrument(this.instruInst,this.instruFreq,this.instruVelo,this.instruDela,this.instruDura)
   }
 
   /*
@@ -333,9 +422,6 @@ export class AppComponent {
     let beat = 1
     let measure = 1
     let bar = 1
-
-    // sets the frequencies
-    this.setupSounds()
 
     // plays the notes in the array, starting at 1,1,1,1
     this.iterateNotes(bar, measure, beat, note)
@@ -378,48 +464,7 @@ export class AppComponent {
         // if the current beat is "on", play a sound
         if(this.bars[this.barPlaying-1][this.measurePlaying-1][this.beatPlaying-1][this.notePlaying-1]) {
 
-          // switch to determine which sound should be played, depending on the note number (0-2 percussion, 3-7 bass, 8-12 melody)
-          switch(note-1) {
-            case 0:
-              this.playNote(this.perc1Sound)
-              break
-            case 1:
-              this.playNote(this.perc2Sound)
-              break
-            case 2:
-              this.playNote(this.perc3Sound)
-              break
-            case 3:
-              this.playNote(this.bass1Sound)
-              break
-            case 4:
-              this.playNote(this.bass2Sound)
-              break
-            case 5:
-              this.playNote(this.bass3Sound)
-              break
-            case 6:
-              this.playNote(this.bass4Sound)
-              break
-            case 7:
-              this.playNote(this.bass5Sound)
-              break
-            case 8:
-              this.playNote(this.melody1Sound)
-              break
-            case 9:
-              this.playNote(this.melody2Sound)
-              break
-            case 10:
-              this.playNote(this.melody3Sound)
-              break
-            case 11:
-              this.playNote(this.melody4Sound)
-              break
-            case 12:
-              this.playNote(this.melody5Sound)
-              break
-          }
+          this.playNote(note-1)
         }
 
         // increment note
@@ -455,9 +500,11 @@ export class AppComponent {
         // recursively call this function to play the next note
         this.iterateNotes(this.barPlaying, this.measurePlaying, this.beatPlaying, this.notePlaying)
 
-      }, 15)
+      }, this.playbackBeatGap)
     }
   }
+
+  playbackBeatGap = 8
 
   loopCheck() {
     if(this.loopEndBar < this.loopStartBar) {

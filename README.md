@@ -6,7 +6,7 @@ Generated with [Angular CLI](https://github.com/angular/angular-cli).
 
 - Audio
   - General audio
-    - Make fequencies better/more accurate
+    - Make fequencies better/more accurate ✓
     - Get/Create actual beat sounds
 - Visual
   - Feedback
@@ -24,8 +24,8 @@ Generated with [Angular CLI](https://github.com/angular/angular-cli).
   - Note toggling
     - Allow for continuous click to toggle notes (holding down mouse button)
   - Volume
-    - Master slider
-    - Individual sliders for percussion/bass/melody
+    - Master slider ✓
+    - Individual sliders for percussion/bass/melody ✓
     - On/Off toggles for solo/muting
 
 ## Development server
