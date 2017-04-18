@@ -10,6 +10,52 @@
 <section id="userControls" class="panel">
   <section class="tool">
     <header class="panel-header">
+      <p>Instruments</p>
+    </header>
+    <p class="guide">Picks the instruments to use for the notes</p>
+    <section class="selections">
+      <p>Percussion</p>
+      <select name="percussionInstrumentSelect" id="percussionInstrumentSelect" [(ngModel)]="percussionInstrument">
+        <option value="adau" disabled>adau</option>
+        <option value="alpha" disabled>alpha</option>
+        <option value="beta">beta</option>
+        <option value="delta" disabled>delta</option>
+        <option value="druk" disabled>druk</option>
+        <option value="gamma" disabled>gamma</option>
+      </select>
+      <p>Bass</p>
+      <select name="bassInstrumentSelect" id="bassInstrumentSelect" [(ngModel)]="bassInstrument">
+        <option value="adau" disabled>adau</option>
+        <option value="alpha" disabled>alpha</option>
+        <option value="beta" disabled>beta</option>
+        <option value="delta" disabled>delta</option>
+        <option value="druk">druk</option>
+        <option value="gamma" disabled>gamma</option>
+      </select>
+      <p>Melody</p>
+      <select name="melodyInstrumentSelect" id="melodyInstrumentSelect" [(ngModel)]="melodyInstrument">
+        <option value="adau" disabled>adau</option>
+        <option value="alpha" disabled>alpha</option>
+        <option value="beta" disabled>beta</option>
+        <option value="delta" disabled>delta</option>
+        <option value="druk" disabled>druk</option>
+        <option value="gamma">gamma</option>
+      </select>
+    </section>
+    <p>Volumes</p>
+    <section class="selections">
+      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="percussionVolume">
+      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="bassVolume">
+      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="melodyVolume">
+    </section>
+    <p>Master volume</p>
+    <section class="selections">
+      <input type="range" min="0" max="1" step="0.01" [(ngModel)]="masterVolume">
+    </section>
+  </section>
+  <hr>
+  <section class="tool">
+    <header class="panel-header">
       <p>Copy Bars</p>
     </header>
     <p class="guide">Copies one bar to one or many others</p>
@@ -113,6 +159,53 @@
   <button (click)="stopNote()">End beat</button>
   <hr>
   <button (click)="randomizeIt()">Randomize</button>
+  <hr>
+  <button (click)="playInstrument(instruInst, instruFreq, instruVelo, instruDela, instruDura)">Boop</button>
+  <button (click)="prevInstru()">Prev</button>
+  <button (click)="nextInstru()">Next</button> <!-- listen 130 range -->
+  <br>
+  <input type="number" placeholder="Instrument(0)" [(ngModel)]="instruInst">
+  <br>
+  <input type="number" placeholder="Frequency(72)" [(ngModel)]="instruFreq">
+  <br>
+  <input type="number" placeholder="Velocity(0.5)" [(ngModel)]="instruVelo">
+  <br>
+  <input type="number" placeholder="Delay(0)" [(ngModel)]="instruDela">
+  <br>
+  <input type="number" placeholder="Duration(0.2)" [(ngModel)]="instruDura">
+  <hr>
+  <span>perc1</span>
+  <button (click)="percussionInstrument1No=percussionInstrument1No-1">-</button>
+  <input type="number" placeholder="perc1 no" [(ngModel)]="percussionInstrument1No">
+  <button (click)="percussionInstrument1No=percussionInstrument1No+1">+</button>
+  <br>
+  <span>perc2</span>
+  <button (click)="percussionInstrument2No=percussionInstrument2No-1">-</button>
+  <input type="number" placeholder="perc2 no" [(ngModel)]="percussionInstrument2No">
+  <button (click)="percussionInstrument2No=percussionInstrument2No+1">+</button>
+  <br>
+  <span>perc3</span>
+  <button (click)="percussionInstrument3No=percussionInstrument3No-1">-</button>
+  <input type="number" placeholder="perc3 no" [(ngModel)]="percussionInstrument3No">
+  <button (click)="percussionInstrument3No=percussionInstrument3No+1">+</button>
+  <br>
+  <span>bass</span>
+  <button (click)="bassInstrumentNo=bassInstrumentNo-1">-</button>
+  <input type="number" placeholder="bass no" [(ngModel)]="bassInstrumentNo">
+  <button (click)="bassInstrumentNo=bassInstrumentNo+1">+</button>
+  <br>
+  <span>melody</span>
+  <button (click)="melodyInstrumentNo=melodyInstrumentNo-1">-</button>
+  <input type="number" placeholder="melody no" [(ngModel)]="melodyInstrumentNo">
+  <button (click)="melodyInstrumentNo=melodyInstrumentNo+1">+</button>
+  <br>
+  <hr>
+  <p>beat delay</p>
+  <input type="number" placeholder="Playback Rate(10)" [(ngModel)]="playbackBeatGap">
+  <hr>
+  <p>reverb</p>
+  <input type="number" placeholder="reverb(0.3)" #reverbInput>
+  <button (click)="setReverb(reverbInput.value)">change</button>
   <hr>
 </section>
 <section class="mandachord">
