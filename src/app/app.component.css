@@ -63,6 +63,9 @@ hr {
 .panel .tool .selections > * {
   flex-grow: 1;
 }
+.panel .tool .selections > span {
+  width: 33%;
+}
 .panel .tool .selections select {
   font-family: Oswald;
 }
