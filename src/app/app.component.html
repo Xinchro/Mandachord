@@ -1,160 +1,4 @@
-<header>
-  <h1 class="title">
-    Mandachord
-  </h1>
-  <p>URL: <input value="{{getSongURL()}}" (click)="$event.target.select()"></p>
-  <button class="playback-button" [ngClass]="{'playing': !paused}" (click)="playSoundsLinear()">Play</button>
-  <button class="playback-button" [ngClass]="{'paused': paused}" (click)="paused=true">Pause</button>
-</header>
-<section id="userControls" class="panel">
-  <section class="tool">
-    <header class="panel-header">
-      <p>Instruments</p>
-    </header>
-    <p class="guide">Picks the instruments to use for the notes</p>
-    <section class="selections">
-      <p>Percussion</p>
-      <select name="percussionInstrumentSelect" id="percussionInstrumentSelect" [(ngModel)]="percussionInstrument">
-        <option value="adau" disabled>adau</option>
-        <option value="alpha" disabled>alpha</option>
-        <option value="beta">beta</option>
-        <option value="delta" disabled>delta</option>
-        <option value="druk" disabled>druk</option>
-        <option value="gamma" disabled>gamma</option>
-      </select>
-      <p>Bass</p>
-      <select name="bassInstrumentSelect" id="bassInstrumentSelect" [(ngModel)]="bassInstrument">
-        <option value="adau" disabled>adau</option>
-        <option value="alpha" disabled>alpha</option>
-        <option value="beta" disabled>beta</option>
-        <option value="delta" disabled>delta</option>
-        <option value="druk">druk</option>
-        <option value="gamma" disabled>gamma</option>
-      </select>
-      <p>Melody</p>
-      <select name="melodyInstrumentSelect" id="melodyInstrumentSelect" [(ngModel)]="melodyInstrument">
-        <option value="adau" disabled>adau</option>
-        <option value="alpha" disabled>alpha</option>
-        <option value="beta" disabled>beta</option>
-        <option value="delta" disabled>delta</option>
-        <option value="druk" disabled>druk</option>
-        <option value="gamma">gamma</option>
-      </select>
-    </section>
-    <p>Volumes</p>
-    <section class="selections">
-      <span>Percussion</span>
-      <span>Bass</span>
-      <span>Melody</span>
-    </section>
-    <section class="selections">
-      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="percussionVolume">
-      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="bassVolume">
-      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="melodyVolume">
-    </section>
-    <p>Master volume</p>
-    <section class="selections">
-      <input type="range" min="0" max="1" step="0.01" [(ngModel)]="masterVolume">
-    </section>
-  </section>
-  <hr>
-  <section class="tool">
-    <header class="panel-header">
-      <p>Copy Bars</p>
-    </header>
-    <p class="guide">Copies one bar to one or many others</p>
-    <section class="selections">
-      <p>Beats</p>
-      <select name="barCopySelectNotes" id="barCopySelectNotes" [(ngModel)]="copyBarNoteType">
-        <option value="all">all</option>
-        <option value="percussion">percussion</option>
-        <option value="bass">bass</option>
-        <option value="melody">melody</option>
-      </select>
-      <p>From Bar</p>
-      <select name="barCopySelectFrom" id="barCopySelectFrom" [(ngModel)]="copyFromBar">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-      <p>To Bar</p>
-      <select name="barCopySelectTo" id="barCopySelectTo" [(ngModel)]="copyToBar">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="all">all</option>
-      </select>
-      <button (click)="doCopyBar()">Copy Bar</button>
-    </section>
-  </section>
-  <hr>
-  <section class="tool">
-    <header class="panel-header">
-      <p>Copy Measures</p>
-    </header>
-    <p class="guide">Copies the measure(4 beats) within the same bar</p>
-    <section class="selections">
-      <p>Beats</p>
-      <select name="MeasureBarCopySelectNotes" id="MeasureBarCopySelectNotes" [(ngModel)]="copyBarMeasureNoteType">
-        <option value="all">all</option>
-        <option value="percussion">percussion</option>
-        <option value="bass">bass</option>
-        <option value="melody">melody</option>
-      </select>
-      <p>From Bar</p>
-      <select name="measureBarCopySelectFrom" id="measureBarCopySelectFrom" [(ngModel)]="copyFromMeasureBar">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-    </section>
-    <section class="selections">
-      <p>From Measure</p>
-      <select name="measureCopySelectFrom" id="measureCopySelectFrom" [(ngModel)]="copyFromMeasure">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-      <p>To Measure</p>
-      <select name="measureCopySelectTo" id="measureCopySelectTo" [(ngModel)]="copyToMeasure">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="all">all</option>
-      </select>
-      <button (click)="doCopyMeasure()">Copy Measure</button>
-    </section>
-  </section>
-  <hr>
-  <section class="tool">
-    <header class="panel-header">
-      <p>Loop Bars</p>
-    </header>
-    <p class="guide">Loops from one bar to another</p>
-    <section class="selections">
-      <p>Start</p>
-      <select name="loopStartSelect" id="loopStartSelect" [(ngModel)]="loopStartBar" (ngModelChange)="loopCheck();resetPlayback()">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-      <p>End</p>
-      <select name="loopEndSelect" id="loopEndSelect" [(ngModel)]="loopEndBar">
-        <option value="1" *ngIf="loopStartBar<2">1</option>
-        <option value="2" *ngIf="loopStartBar<3">2</option>
-        <option value="3" *ngIf="loopStartBar<4">3</option>
-        <option value="4">4</option>
-      </select>
-    </section>
-  </section>
-</section>
-<section id="controlPanel" class="panel">
+<section id="controlPanel" class="panel" *ngIf="inDev">
   <h2>dev panel</h2>
   <button (click)="copyURL()">Copy URL</button>
   <hr>
@@ -214,6 +58,14 @@
   <button (click)="setReverb(reverbInput.value)">change</button>
   <hr>
 </section>
+<header>
+  <h1 class="title">
+    Mandachord
+  </h1>
+  <p>URL: <input value="{{getSongURL()}}" (click)="$event.target.select()"></p>
+  <button class="playback-button" [ngClass]="{'playing': !paused}" (click)="playSoundsLinear()">Play</button>
+  <button class="playback-button" [ngClass]="{'paused': paused}" (click)="paused=true">Pause</button>
+</header>
 <section class="mandachord">
   <div class="trackbar" [style.transform]="getTrackBarRotStr()"></div>
   <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" height="800" version="1.1" width="800" id="svg1796" sodipodi:docname="mandachord.svg" inkscape:version="0.92.1 r15371">
@@ -1226,4 +1078,152 @@
   </svg>
 
 
+</section>
+<section id="userControls" class="panel">
+  <section class="tool">
+    <header class="panel-header">
+      <p>Instruments</p>
+    </header>
+    <p class="guide">Picks the instruments to use for the notes</p>
+    <section class="selections">
+      <p>Percussion</p>
+      <select name="percussionInstrumentSelect" id="percussionInstrumentSelect" [(ngModel)]="percussionInstrument">
+        <option value="adau" disabled>adau</option>
+        <option value="alpha" disabled>alpha</option>
+        <option value="beta">beta</option>
+        <option value="delta" disabled>delta</option>
+        <option value="druk" disabled>druk</option>
+        <option value="gamma" disabled>gamma</option>
+      </select>
+      <p>Bass</p>
+      <select name="bassInstrumentSelect" id="bassInstrumentSelect" [(ngModel)]="bassInstrument">
+        <option value="adau" disabled>adau</option>
+        <option value="alpha" disabled>alpha</option>
+        <option value="beta" disabled>beta</option>
+        <option value="delta" disabled>delta</option>
+        <option value="druk">druk</option>
+        <option value="gamma" disabled>gamma</option>
+      </select>
+      <p>Melody</p>
+      <select name="melodyInstrumentSelect" id="melodyInstrumentSelect" [(ngModel)]="melodyInstrument">
+        <option value="adau" disabled>adau</option>
+        <option value="alpha" disabled>alpha</option>
+        <option value="beta" disabled>beta</option>
+        <option value="delta" disabled>delta</option>
+        <option value="druk" disabled>druk</option>
+        <option value="gamma">gamma</option>
+      </select>
+    </section>
+    <p>Volumes</p>
+    <section class="selections">
+      <span>Percussion</span>
+      <span>Bass</span>
+      <span>Melody</span>
+    </section>
+    <section class="selections">
+      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="percussionVolume">
+      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="bassVolume">
+      <input type="range" min="0" max="1" step="0.01"  [(ngModel)]="melodyVolume">
+    </section>
+    <p>Master volume</p>
+    <section class="selections">
+      <input type="range" min="0" max="1" step="0.01" [(ngModel)]="masterVolume">
+    </section>
+  </section>
+  <hr>
+  <section class="tool">
+    <header class="panel-header">
+      <p>Copy Bars</p>
+    </header>
+    <p class="guide">Copies one bar to one or many others</p>
+    <section class="selections">
+      <p>Beats</p>
+      <select name="barCopySelectNotes" id="barCopySelectNotes" [(ngModel)]="copyBarNoteType">
+        <option value="all">all</option>
+        <option value="percussion">percussion</option>
+        <option value="bass">bass</option>
+        <option value="melody">melody</option>
+      </select>
+      <p>From Bar</p>
+      <select name="barCopySelectFrom" id="barCopySelectFrom" [(ngModel)]="copyFromBar">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <p>To Bar</p>
+      <select name="barCopySelectTo" id="barCopySelectTo" [(ngModel)]="copyToBar">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="all">all</option>
+      </select>
+      <button (click)="doCopyBar()">Copy Bar</button>
+    </section>
+  </section>
+  <hr>
+  <section class="tool">
+    <header class="panel-header">
+      <p>Copy Measures</p>
+    </header>
+    <p class="guide">Copies the measure(4 beats) within the same bar</p>
+    <section class="selections">
+      <p>Beats</p>
+      <select name="MeasureBarCopySelectNotes" id="MeasureBarCopySelectNotes" [(ngModel)]="copyBarMeasureNoteType">
+        <option value="all">all</option>
+        <option value="percussion">percussion</option>
+        <option value="bass">bass</option>
+        <option value="melody">melody</option>
+      </select>
+      <p>From Bar</p>
+      <select name="measureBarCopySelectFrom" id="measureBarCopySelectFrom" [(ngModel)]="copyFromMeasureBar">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </section>
+    <section class="selections">
+      <p>From Measure</p>
+      <select name="measureCopySelectFrom" id="measureCopySelectFrom" [(ngModel)]="copyFromMeasure">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <p>To Measure</p>
+      <select name="measureCopySelectTo" id="measureCopySelectTo" [(ngModel)]="copyToMeasure">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="all">all</option>
+      </select>
+      <button (click)="doCopyMeasure()">Copy Measure</button>
+    </section>
+  </section>
+  <hr>
+  <section class="tool">
+    <header class="panel-header">
+      <p>Loop Bars</p>
+    </header>
+    <p class="guide">Loops from one bar to another</p>
+    <section class="selections">
+      <p>Start</p>
+      <select name="loopStartSelect" id="loopStartSelect" [(ngModel)]="loopStartBar" (ngModelChange)="loopCheck();resetPlayback()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <p>End</p>
+      <select name="loopEndSelect" id="loopEndSelect" [(ngModel)]="loopEndBar">
+        <option value="1" *ngIf="loopStartBar<2">1</option>
+        <option value="2" *ngIf="loopStartBar<3">2</option>
+        <option value="3" *ngIf="loopStartBar<4">3</option>
+        <option value="4">4</option>
+      </select>
+    </section>
+  </section>
 </section>

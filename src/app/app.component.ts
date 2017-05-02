@@ -25,6 +25,8 @@ export class AppComponent {
 
   player = new Instruments()
 
+  inDev = false
+
   constructor(private activatedRoute: ActivatedRoute) {
     console.log("Mandachord warming up")
 
