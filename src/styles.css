@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
 body {
   margin: 0;
   padding: 0;
@@ -6,35 +8,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: 'Oswald', sans-serif;
+  text-shadow: 1px 1px 0 white, -1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white;
 }
 
-/*.beat {
-  fill: lime;
+#controlPanel {
+  display: none;
 }
-.beat.percussion {
-  fill: silver;
-}
-.beat.percussion:hover {
-  fill: lightgray;
-}
-.beat.percussion.noteOn {
-  fill: gray;
-}
-.beat.bass {
-  fill: blue;
-}
-.beat.bass:hover {
-  fill: lightblue;
-}
-.beat.bass.noteOn {
-  fill: cyan;
-}
-.beat.melody {
-  fill: violet;
-}
-.beat.melody:hover {
-  fill: pink;
-}
-.beat.melody.noteOn {
-  fill: purple;
-}*/
