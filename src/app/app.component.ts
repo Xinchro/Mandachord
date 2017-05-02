@@ -268,7 +268,7 @@ export class AppComponent {
   percussionInstrument3No = 171
   percussionVolume = 1
   percussionInstrumentFreq = [72,300,200]
-  bassInstrumentNo = 65
+  bassInstrumentNo = 51
   bassVolume = 1
   bassInstrumentFreq = [35,37,40,43,45]
   melodyInstrumentNo = 96
@@ -423,8 +423,13 @@ export class AppComponent {
     let measure = 1
     let bar = 1
 
-    // plays the notes in the array, starting at 1,1,1,1
-    this.iterateNotes(bar, measure, beat, note)
+    // make sure it doesn't play while it's playing
+    if(this.paused) {
+      this.paused = false
+
+      // plays the notes in the array, starting at 1,1,1,1
+      this.iterateNotes(bar, measure, beat, note)
+    }
   }
 
   barPlaying = 1
@@ -455,7 +460,7 @@ export class AppComponent {
   **/
   iterateNotes(bar, measure, beat, note) {
 
-    // pauses playback if paused
+    // pauses playback if playing
     if(!this.paused) {
 
       //sets up a timeout to allow space between beats being played
